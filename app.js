@@ -1,4 +1,5 @@
 var fs = require('fs');
+var rimraf = require('rimraf');
 var bodyParser = require("body-parser");
 var express = require('express');
 var path = require('path');
@@ -17,6 +18,36 @@ app.get('/controllers/:id', function (req, res) {
     res.sendFile(path.join(__dirname + '/controllers/' + req.params.id));
     //res.sendFile(path.join(__dirname + '/index.html'));
 });
+
+app.post('/del', function (req, res) {
+    //req.body.newPathDel
+    if(req.body.typeOfFile == 'file'){
+        fs.stat(req.body.newPathDel, function (err, stats) {
+            if (err) {
+                res.send('file no deleted');
+                return console.error(err);
+            }
+
+            fs.unlink(req.body.newPathDel,function(err){
+                if(err) return console.log(err);
+                console.log('file deleted successfully');
+                res.end('file deleted successfully');
+            });
+        });
+    } else {
+        if (req.body.typeOfFile == 'folder'){
+            rimraf(req.body.newPathDel, function () {
+                res.end('file deleted successfully');
+                console.log('file deleted successfully');
+            });
+        } else {
+            console.log('no access to delete file');
+            res.end('file deleted successfully');
+        }
+    }
+
+
+})
 
 app.post('/send_path', function (req, res) {
     function objectSend(nameOfFile, characteristic) {

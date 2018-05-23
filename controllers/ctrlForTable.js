@@ -6,7 +6,8 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
         vm.pathTable = 'C://';
         vm.renderDataTable = [];
         vm.massIdexOf = [];
-        vm.massTypeOf = [];
+        vm.haveLinkOfDir = '';
+
         $scope.$watch(function () {
             return vm.renderDataTable;
         }, function (newValue, oldValue) {
@@ -17,13 +18,53 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
             }
         });
 
+        vm.onHaveLinkOfDir = function (val) {
+            //debugger;
+            if(vm.pathTable == 'C://'){
+                vm.haveLinkOfDir = vm.pathTable + val.renderFileName;
+            } else {
+                vm.haveLinkOfDir = vm.pathTable + '//' + val.renderFileName;
+            }
+        };
+        vm.onGetLinkOfDir = function (){
+
+            if(vm.haveLinkOfDir != ''){
+                //debugger;
+                var memberOFButtonLink = vm.haveLinkOfDir;
+                var nameFile = vm.haveLinkOfDir.substring(vm.haveLinkOfDir.lastIndexOf("//") + 2, vm.haveLinkOfDir.length);
+                var btn = document.createElement("BUTTON");        // Create a <button> element
+                var t = document.createTextNode(nameFile);       // Create a text node
+                btn.appendChild(t);                                // Append the text to <button>
+                macDack.appendChild(btn);                    // Append <button> to <body>
+                btn.onclick = function() {
+                    vm.pathTable = memberOFButtonLink;
+                    sendMessage();
+                };
+                btn.onmouseover = function(){
+                    //debugger;
+                    var p = document.createElement("p");
+                    var t = document.createTextNode('X');       // Create a text node
+                    p.appendChild(t);                                // Append the text to <button>
+                    this.appendChild(p);
+                };
+                btn.onmouseout = function(){
+
+                    var element=document.getElementsByClassName('share')[0].children[1];
+                    element.remove()
+                    //debugger;
+                };
+                vm.haveLinkOfDir = '';
+            }
+
+        };
+
         vm.onSendEnterInTable = function (val) {
             //debugger;
-            if (val != 'UP') {//углубляемся в папку
+            if (val.renderFileName != 'UP') {//углубляемся в папку
                 if (vm.pathTable == 'C://') {
-                    vm.pathTable += val;
+                    vm.pathTable += val.renderFileName;
                 } else {
-                    vm.pathTable += '//' + val;
+                    vm.pathTable += '//' + val.renderFileName;
                 }
             } else {//выходим из нее
                 if ((vm.pathTable.lastIndexOf("//") != 2)) {
@@ -31,24 +72,6 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
                 } else
                     vm.pathTable = vm.pathTable.substring(0, vm.pathTable.lastIndexOf("//") + 2);
             }
-
-
-            /* if(vm.pathTable == 'C://') {
-                 vm.pathTable +=val;
-             } else {
-                 vm.pathTable += '//' + val;
-             }
-             if((val != 'UP') &&(vm.pathTable.lastIndexOf("//") != 2)){
-
-             } else{
-                 debugger;
-                 if(vm.pathTable.lastIndexOf("//") != 2){
-                     vm.pathTable = vm.pathTable.substring(0, vm.pathTable.lastIndexOf("//")+2);
-                 }else{
-
-                 }
-
-             }*/
 
             sendMessage();
         };
@@ -93,22 +116,47 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
                     break;
 
                 case 13://enter
-                    vm.onSendEnterInTable(val);
-                    if (index <= vm.renderDataTable.length && index >= 0) {
-                        document.getElementById(0).focus();
-                    }
-                    if (index - 1000000 <= vm.massIdexOf.length && index - 1000000 >= 0) {
-                        document.getElementById(1000000).focus();
-                    }
+                    vm.pressEnter(event, index, val);
                     break;
 
-                /*default:
+                case 46://del
+                    vm.pressDelete(event, index, val);
+                    break;
 
-                    break;*/
             }
 
 
         }
+
+        vm.pressEnter = function(event, index, val){
+            vm.onSendEnterInTable(val);
+            if (index <= vm.renderDataTable.length && index >= 0) {
+                document.getElementById(0).focus();
+            }
+            if (index - 1000000 <= vm.massIdexOf.length && index - 1000000 >= 0) {
+                document.getElementById(1000000).focus();
+            }
+        };
+        vm.pressDelete = function(event, index, val){
+            if (val.renderFileName != 'UP') {
+                debugger;
+                var pathSend;
+                if(vm.pathTable == 'C://') {
+                    pathSend = vm.pathTable + val.renderFileName;
+                } else{
+                    pathSend = vm.pathTable + '//' + val.renderFileName;
+                }
+                var promise = $http.post('/del', {
+                    newPathDel: pathSend,
+                    typeOfFile: val.typeOfFile
+
+                }, {});
+                promise.then(function (response) {
+                    sendMessage();
+                });
+            }
+        };
+
 
         vm.backTable = function () {
             if (vm.pathTable.lastIndexOf("//") > 2) {
@@ -131,18 +179,25 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
             var promise = $http.post('/send_path', {newPath: pathoftables}, {});
             promise.then(function (response) {
                 vm.renderDataTable = [];
-
                 if (vm.pathTable != 'C://') {
-                    vm.renderDataTable[0] = 'UP';
+                    vm.renderDataTable[0] = {renderFileName: 'UP', typeOfFile: ''};
                     //debugger;
                     if (response.data.newPath != undefined) {
                         for (var i = 0; i < response.data.newPath.length; i++) {
-                            vm.renderDataTable[i + 1] = response.data.newPath[i];
+                            vm.renderDataTable[i + 1] = {
+                                renderFileName: response.data.newPath[i],
+                                typeOfFile: response.data.massOfTypeFiles[i].characteristic
+                            };
                         }
                     }
                 } else {
                     //debugger;
-                    vm.renderDataTable = response.data.newPath;
+                    for (var i = 0; i < response.data.newPath.length; i++) {
+                        vm.renderDataTable[i] = {
+                            renderFileName: response.data.newPath[i],
+                            typeOfFile: response.data.massOfTypeFiles[i].characteristic
+                        };
+                    }
                 }
 
             });
