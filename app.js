@@ -46,8 +46,27 @@ app.post('/del', function (req, res) {
         }
     }
 
+});
 
-})
+app.post('/view', function (req, res) {
+    res.sendFile(path.join(req.body.newPath));
+});
+
+app.post('/makeNewFolder', function (req, res) {
+    fs.mkdir('c:/boot/writeme', function() { //req.body.newPath + '//ru'
+        console.log('папка успешно созданна');
+        res.end();
+    });
+
+    /*var mkdirp = require('mkdirp');
+    mkdirp(req.body.newPath + '//ru', function(err) {
+        console.log('папка успешно созданна');
+        res.end();
+
+    });*/
+
+});
+
 
 app.post('/send_path', function (req, res) {
     function objectSend(nameOfFile, characteristic) {

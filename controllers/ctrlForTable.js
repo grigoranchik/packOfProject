@@ -3,9 +3,12 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
 
     function ($scope, $timeout, $http, $q) {
         var vm = this;
+
+        console.info("created new instance of ctrlForTable..");
         vm.pathTable = 'C://';
         vm.renderDataTable = [];
         vm.massIdexOf = [];
+        vm.massOfButton = 0;
         vm.haveLinkOfDir = '';
 
         $scope.$watch(function () {
@@ -26,33 +29,49 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
                 vm.haveLinkOfDir = vm.pathTable + '//' + val.renderFileName;
             }
         };
+
+        vm.cleanLinkOfDir = function (){
+            vm.haveLinkOfDir = '';
+        };
+
+        vm.tabElements = [/*{tabName: 'fuck'}, {tabName: 'beach'}*/];
+        vm.onTabButtonClicked = function (selectedTabName) {
+            vm.pathTable = selectedTabName;
+            sendMessage();
+            console.info('Select me: ' + selectedTabName);
+        };
+
+        vm.hideElem = function(){
+            var a = document.body.children[3].children[0].children[1].children[1];
+
+            a.style.display = 'none';
+
+        };
+        vm.showElem = function(){
+            //console.log(document.body.children[3]);
+            var a = document.body.children[3].children[0].children[1].children[1];
+
+            a.style.display = 'block';
+
+        };
+
+        vm.onCloseTabButtonClicked = function (removingTabId) {
+            console.info('Remove me : ' + removingTabId);
+
+            vm.tabElements = _.filter(vm.tabElements, function(tabObject) {
+                return tabObject.tabId !== removingTabId;
+            })
+        };
+
         vm.onGetLinkOfDir = function (){
 
             if(vm.haveLinkOfDir != ''){
                 //debugger;
                 var memberOFButtonLink = vm.haveLinkOfDir;
                 var nameFile = vm.haveLinkOfDir.substring(vm.haveLinkOfDir.lastIndexOf("//") + 2, vm.haveLinkOfDir.length);
-                var btn = document.createElement("BUTTON");        // Create a <button> element
-                var t = document.createTextNode(nameFile);       // Create a text node
-                btn.appendChild(t);                                // Append the text to <button>
-                macDack.appendChild(btn);                    // Append <button> to <body>
-                btn.onclick = function() {
-                    vm.pathTable = memberOFButtonLink;
-                    sendMessage();
-                };
-                btn.onmouseover = function(){
-                    //debugger;
-                    var p = document.createElement("p");
-                    var t = document.createTextNode('X');       // Create a text node
-                    p.appendChild(t);                                // Append the text to <button>
-                    this.appendChild(p);
-                };
-                btn.onmouseout = function(){
 
-                    var element=document.getElementsByClassName('share')[0].children[1];
-                    element.remove()
-                    //debugger;
-                };
+                vm.tabElements.push({tabName:nameFile, tabAddress: vm.haveLinkOfDir, tabId: new Date().getTime()});
+
                 vm.haveLinkOfDir = '';
             }
 
@@ -120,6 +139,90 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
                     break;
 
                 case 46://del
+                    vm.pressDelete(event, index, val);
+                    break;
+
+            }
+
+
+        }
+
+        vm.responseInformation = '';
+        $scope.div = document.body.children[2];
+        $scope.$watch(function () {
+            return vm.responseInformation;
+        }, function (newValue, oldValue) {
+            if(vm.responseInformation != ''){
+                /*var a = document.body.children[2].children[0].children[1].children[1];
+                a.style.display = 'none';*/
+                debugger;
+                $scope.div.style.display = 'block';
+            } else{
+                $scope.div.style.display = 'none';
+            }
+
+        });
+        vm.mainKeyDown = function (event, index, val) {
+            //debugger;
+            switch (event.keyCode) {
+                case 114: //f3 View
+                    event.stopPropagation(); //cancelBubble = true;
+                    event.preventDefault();
+                    //debugger;
+                    var path;
+                    if(vm.pathTable != 'C://') {
+                        path = vm.pathTable + '//' + val.renderFileName;
+                    } else{
+                        path = vm.pathTable + val.renderFileName;
+                    }
+
+                    var promise = $http.post('/view', {newPath: path}, {});
+                    promise.then(function (response) {
+                        //window.open();                                          //??
+                        vm.responseInformation = response.data;
+                        debugger;
+
+                    });
+
+                    //console.log('document.activeElement', document.activeElement);
+
+
+                    break;
+                case 115: //f4 Edit
+
+                    break;
+
+                case 116://f5 Copy
+                    document.getElementById(0).focus();
+                    break;
+
+                case 117://f6 Move
+                    document.getElementById(1000000).focus();
+                    break;
+
+                case 118://f7 New Folder
+                    debugger;
+
+                    if(val.typeOfFile == 'folder'){
+                        var path;
+                        if(vm.pathTable != 'C://') {
+                            path = vm.pathTable + '//' + val.renderFileName;
+                        } else{
+                            path = vm.pathTable + val.renderFileName;
+                        }
+                        var promise = $http.post('/makeNewFolder', {newPath: path}, {});
+                        promise.then(function (response) {
+                            //window.open();                                          //??
+                            alert('папку успешно созданна');
+
+                        });
+                    }else{
+                        alert('создать файл можно только в папке');
+                    }
+
+                    break;
+
+                case 119://f8 Del
                     vm.pressDelete(event, index, val);
                     break;
 
