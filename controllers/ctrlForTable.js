@@ -11,6 +11,8 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
         vm.massOfButton = 0;
         vm.haveLinkOfDir = '';
 
+        vm.currentTabMode = 'LOADING';
+
         $scope.$watch(function () {
             return vm.renderDataTable;
         }, function (newValue, oldValue) {
@@ -149,19 +151,19 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
 
         vm.responseInformation = '';
         $scope.div = document.body.children[2];
-        $scope.$watch(function () {
+        /*$scope.$watch(function () {
             return vm.responseInformation;
         }, function (newValue, oldValue) {
             if(vm.responseInformation != ''){
-                /*var a = document.body.children[2].children[0].children[1].children[1];
-                a.style.display = 'none';*/
+                /!*var a = document.body.children[2].children[0].children[1].children[1];
+                a.style.display = 'none';*!/
                 debugger;
                 $scope.div.style.display = 'block';
             } else{
                 $scope.div.style.display = 'none';
             }
 
-        });
+        });*/
         vm.mainKeyDown = function (event, index, val) {
             //debugger;
             switch (event.keyCode) {
@@ -180,8 +182,8 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
                     promise.then(function (response) {
                         //window.open();                                          //??
                         vm.responseInformation = response.data;
-                        debugger;
-
+                        //debugger;
+                        vm.currentTabMode ='FILE_CONTENT';
                     });
 
                     //console.log('document.activeElement', document.activeElement);
@@ -302,6 +304,8 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
                         };
                     }
                 }
+
+                vm.currentTabMode = 'FOLDER_LIST';
 
             });
         }

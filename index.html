@@ -17,6 +17,7 @@
     .blia:focus {
         background: rgba(117, 190, 218, 0.5);
     }
+    .total_panel {width:250px;}
     .showContent {
         height:200px;
         width:300px;
@@ -24,7 +25,7 @@
        /* margin: 0 auto;
         left:-300px;
         top:100px;*/
-        display: none;
+        /*display: none;*/
     }
 </style>
 
@@ -32,13 +33,25 @@
     <input type = "text" ng-model="ctrlLeft1.responseInformation"/>
 </div>-->
 
-<div ng-controller="ctrlForTable as ctrlLeft" ng-scope>
+<div class="total_panel" ng-controller="ctrlForTable as ctrlLeft" ng-switch="ctrlLeft.currentTabMode">
 
-    <div class="showContent">
-        <input type="text" ng-model="ctrlLeft.responseInformation"/>
+    <div ng-switch-when="LOADING">
+        Loading... please wait
     </div>
 
-    <div>
+    <div ng-switch-when="FILE_CONTENT" class="showContent">
+        <textarea type="text" ng-model="ctrlLeft.responseInformation"></textarea>
+    </div>
+
+    <div ng-switch-when="FOLDER_THUMBNAIL">
+        Thumbnails - to be done
+    </div>
+
+    <div ng-switch-when="FOLDER_TREE">
+        Tree - to be done
+    </div>
+
+    <div ng-switch-when="FOLDER_LIST">
         <div id="macDack" class="share" ng-mouseup="ctrlLeft.onGetLinkOfDir()">
             hello
             <p>--</p>
@@ -71,7 +84,8 @@
 </div>
 <!--right-->
 
-<div ng-controller="ctrlForTable as ctrlRight" ng-scope>
+<div class="total_panel" ng-controller="ctrlForTable as ctrlRight">
+
     <!--<table ng-mouseup="ctrlRight.cleanLinkOfDir()" style="margin-left:300px;" cellpadding="0" border="2">
         <tr>
             <td>
