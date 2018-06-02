@@ -6,7 +6,7 @@ MY_TOTAL_APP.controller('fileContentController', ['$scope', '$timeout', '$http',
         console.info("created new instance of fileContentController..");
 
         vm.onClosePopupClicked = function () {
-            alert('Oh .. shit');
+            $scope.closeThisDialog();
         }
     }
 
