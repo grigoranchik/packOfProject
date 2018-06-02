@@ -1,6 +1,6 @@
-angular.module("myApp", ['ngDialog'])
+var MY_TOTAL_APP = angular.module("myApp", ['ngDialog']);
 
-    .controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'ngDialog',
+MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'ngDialog',
 
     function ($scope, $timeout, $http, $q, ngDialog) {
         var vm = this;

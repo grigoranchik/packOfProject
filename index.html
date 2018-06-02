@@ -7,6 +7,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
     <script src="controllers/ajax.js" type="text/javascript"></script>
     <script src="controllers/ctrlForTable.js" type="text/javascript"></script>
+    <script src="controllers/fileContentController.js" type="text/javascript"></script>
     <script src="http://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.4.0/css/ngDialog.min.css">
@@ -35,10 +36,14 @@
 
 <!-- Темплейт попапа с контентом фала для просмотра-->
 <script type="text/ng-template" id="fileContentHtmlTemplate.html">
-    <h1>Hello</h1>
-    <div>
-        Лахапета..
+    <div ng-controller="fileContentController as fileCtrl">
+        <h1>Hello</h1>
+
+
+        <span ng-click="fileCtrl.onClosePopupClicked()">Лахапета..</span>
+        </div>
     </div>
+
 </script>
 
 <!-- Темплейт табы -->
@@ -53,7 +58,7 @@
         <div ng-switch-when="FILE_CONTENT" class="showContent">
             <a href="javascript:void(0)" ng-click="tabCtrl.currentTabMode='FOLDER_LIST'">&lt; Назад в папку</a>
             <hr />
-            <div ng-switch="tabCtrl.fileContentType"><--TEXT, IMAGE-->-={{tabCtrl.fileContentType}}=-
+            <div ng-switch="tabCtrl.fileContentType">
                 <div ng-switch-when="TEXT">text will be here:
                     <textarea type="text" ng-model="tabCtrl.responseInformation"></textarea>
                 </div>
