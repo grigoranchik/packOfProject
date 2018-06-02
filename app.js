@@ -48,9 +48,38 @@ app.post('/del', function (req, res) {
 
 });
 
-app.post('/view', function (req, res) {
-    res.sendFile(path.join(req.body.newPath));
+// Получить инфо - гет
+// /view?fileName=
+// /view/fileName
+// Изменить ифно - пост
+
+app.get('/view/:fileAbsolutePath', function (req, res) {
+    var filePath =  req.params.fileAbsolutePath;
+
+    var options = {
+
+        /*headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true,
+            'Content-Type': 'image/gif'
+        }*/
+    };
+
+    res.sendFile(path.join(filePath), options);
 });
+
+/*app.post('/view', function (req, res) {
+    var options = {
+
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true,
+            'Content-Type': 'image/gif'
+        }
+    };
+
+    res.sendFile(path.join(req.body.newPath), options);
+});*/
 
 app.post('/makeNewFolder', function (req, res) {
     fs.mkdir('c:/boot/writeme', function() { //req.body.newPath + '//ru'

@@ -1,10 +1,14 @@
-angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q',
+angular.module("myApp", ['ngDialog'])
 
+    .controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'ngDialog',
 
-    function ($scope, $timeout, $http, $q) {
+    function ($scope, $timeout, $http, $q, ngDialog) {
         var vm = this;
 
         console.info("created new instance of ctrlForTable..");
+
+
+
         vm.pathTable = 'C://';
         vm.renderDataTable = [];
         vm.massIdexOf = [];
@@ -151,19 +155,7 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
 
         vm.responseInformation = '';
         $scope.div = document.body.children[2];
-        /*$scope.$watch(function () {
-            return vm.responseInformation;
-        }, function (newValue, oldValue) {
-            if(vm.responseInformation != ''){
-                /!*var a = document.body.children[2].children[0].children[1].children[1];
-                a.style.display = 'none';*!/
-                debugger;
-                $scope.div.style.display = 'block';
-            } else{
-                $scope.div.style.display = 'none';
-            }
 
-        });*/
         vm.mainKeyDown = function (event, index, val) {
             //debugger;
             switch (event.keyCode) {
@@ -178,16 +170,26 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
                         path = vm.pathTable + val.renderFileName;
                     }
 
-                    var promise = $http.post('/view', {newPath: path}, {});
-                    promise.then(function (response) {
-                        //window.open();                                          //??
-                        vm.responseInformation = response.data;
-                        //debugger;
-                        vm.currentTabMode ='FILE_CONTENT';
-                    });
+                    var fileContentUri = '/view' + '/' + encodeURIComponent(path);
+                    if(val.renderFileName.indexOf(".png") > -1
+                        || val.renderFileName.indexOf(".jpg") > -1
+                        || val.renderFileName.indexOf(".gif") > -1) {
 
-                    //console.log('document.activeElement', document.activeElement);
+                        vm.responseInformationUri = fileContentUri;
+                        vm.fileContentType = 'IMAGE';
+                        ngDialog.open({ template: 'fileContentHtmlTemplate.html', className: 'ngdialog-theme-default' });
+                    } else {
+                        vm.fileContentType = 'TEXT';
+                        var promise = $http.get(fileContentUri, {});
+                        promise.then(function (response) {
+                            ngDialog.open({ template: 'fileContentHtmlTemplate.html', className: 'ngdialog-theme-default' });
+                            vm.responseInformation = response.data;
+                        });
+                    }
 
+
+
+                    vm.currentTabMode ='FILE_CONTENT';
 
                     break;
                 case 115: //f4 Edit
@@ -311,6 +313,16 @@ angular.module("myApp", []).controller('ctrlForTable', ['$scope', '$timeout', '$
         }
 
         sendMessage();
+
+        function _arrayBufferToBase64( buffer ) {
+            var binary = '';
+            var bytes = new Uint8Array( buffer );
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode( bytes[ i ] );
+            }
+            return window.btoa( binary );
+        }
     }
 
 ]);
