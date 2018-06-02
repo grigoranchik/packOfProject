@@ -8,7 +8,6 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
         console.info("created new instance of ctrlForTable..");
 
 
-
         vm.pathTable = 'C://';
         vm.renderDataTable = [];
         vm.massIdexOf = [];
@@ -29,14 +28,14 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
 
         vm.onHaveLinkOfDir = function (val) {
             //debugger;
-            if(vm.pathTable == 'C://'){
+            if (vm.pathTable == 'C://') {
                 vm.haveLinkOfDir = vm.pathTable + val.renderFileName;
             } else {
                 vm.haveLinkOfDir = vm.pathTable + '//' + val.renderFileName;
             }
         };
 
-        vm.cleanLinkOfDir = function (){
+        vm.cleanLinkOfDir = function () {
             vm.haveLinkOfDir = '';
         };
 
@@ -47,13 +46,13 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
             console.info('Select me: ' + selectedTabName);
         };
 
-        vm.hideElem = function(){
+        vm.hideElem = function () {
             var a = document.body.children[3].children[0].children[1].children[1];
 
             a.style.display = 'none';
 
         };
-        vm.showElem = function(){
+        vm.showElem = function () {
             //console.log(document.body.children[3]);
             var a = document.body.children[3].children[0].children[1].children[1];
 
@@ -64,19 +63,19 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
         vm.onCloseTabButtonClicked = function (removingTabId) {
             console.info('Remove me : ' + removingTabId);
 
-            vm.tabElements = _.filter(vm.tabElements, function(tabObject) {
+            vm.tabElements = _.filter(vm.tabElements, function (tabObject) {
                 return tabObject.tabId !== removingTabId;
             })
         };
 
-        vm.onGetLinkOfDir = function (){
+        vm.onGetLinkOfDir = function () {
 
-            if(vm.haveLinkOfDir != ''){
+            if (vm.haveLinkOfDir != '') {
                 //debugger;
                 var memberOFButtonLink = vm.haveLinkOfDir;
                 var nameFile = vm.haveLinkOfDir.substring(vm.haveLinkOfDir.lastIndexOf("//") + 2, vm.haveLinkOfDir.length);
 
-                vm.tabElements.push({tabName:nameFile, tabAddress: vm.haveLinkOfDir, tabId: new Date().getTime()});
+                vm.tabElements.push({tabName: nameFile, tabAddress: vm.haveLinkOfDir, tabId: new Date().getTime()});
 
                 vm.haveLinkOfDir = '';
             }
@@ -164,32 +163,39 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
                     event.preventDefault();
                     //debugger;
                     var path;
-                    if(vm.pathTable != 'C://') {
+                    if (vm.pathTable != 'C://') {
                         path = vm.pathTable + '//' + val.renderFileName;
-                    } else{
+                    } else {
                         path = vm.pathTable + val.renderFileName;
                     }
 
                     var fileContentUri = '/view' + '/' + encodeURIComponent(path);
-                    if(val.renderFileName.indexOf(".png") > -1
+                    if (val.renderFileName.indexOf(".png") > -1
                         || val.renderFileName.indexOf(".jpg") > -1
                         || val.renderFileName.indexOf(".gif") > -1) {
 
                         vm.responseInformationUri = fileContentUri;
                         vm.fileContentType = 'IMAGE';
-                        ngDialog.open({ template: 'fileContentHtmlTemplate.html', className: 'ngdialog-theme-default' });
+                        ngDialog.open({
+                            template: 'fileContentHtmlTemplate.html',
+                            className: 'ngdialog-theme-default',
+                            scope: $scope
+                        });
                     } else {
                         vm.fileContentType = 'TEXT';
                         var promise = $http.get(fileContentUri, {});
                         promise.then(function (response) {
-                            ngDialog.open({ template: 'fileContentHtmlTemplate.html', className: 'ngdialog-theme-default' });
+                            ngDialog.open({
+                                template: 'fileContentHtmlTemplate.html',
+                                className: 'ngdialog-theme-default',
+                                scope: $scope
+                            });
                             vm.responseInformation = response.data;
                         });
                     }
 
 
-
-                    vm.currentTabMode ='FILE_CONTENT';
+                    vm.currentTabMode = 'FILE_CONTENT';
 
                     break;
                 case 115: //f4 Edit
@@ -207,11 +213,11 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
                 case 118://f7 New Folder
                     debugger;
 
-                    if(val.typeOfFile == 'folder'){
+                    if (val.typeOfFile == 'folder') {
                         var path;
-                        if(vm.pathTable != 'C://') {
+                        if (vm.pathTable != 'C://') {
                             path = vm.pathTable + '//' + val.renderFileName;
-                        } else{
+                        } else {
                             path = vm.pathTable + val.renderFileName;
                         }
                         var promise = $http.post('/makeNewFolder', {newPath: path}, {});
@@ -220,7 +226,7 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
                             alert('папку успешно созданна');
 
                         });
-                    }else{
+                    } else {
                         alert('создать файл можно только в папке');
                     }
 
@@ -235,7 +241,7 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
 
         }
 
-        vm.pressEnter = function(event, index, val){
+        vm.pressEnter = function (event, index, val) {
             vm.onSendEnterInTable(val);
             if (index <= vm.renderDataTable.length && index >= 0) {
                 document.getElementById(0).focus();
@@ -244,13 +250,13 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
                 document.getElementById(1000000).focus();
             }
         };
-        vm.pressDelete = function(event, index, val){
+        vm.pressDelete = function (event, index, val) {
             if (val.renderFileName != 'UP') {
                 debugger;
                 var pathSend;
-                if(vm.pathTable == 'C://') {
+                if (vm.pathTable == 'C://') {
                     pathSend = vm.pathTable + val.renderFileName;
-                } else{
+                } else {
                     pathSend = vm.pathTable + '//' + val.renderFileName;
                 }
                 var promise = $http.post('/del', {
@@ -314,14 +320,14 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
 
         sendMessage();
 
-        function _arrayBufferToBase64( buffer ) {
+        function _arrayBufferToBase64(buffer) {
             var binary = '';
-            var bytes = new Uint8Array( buffer );
+            var bytes = new Uint8Array(buffer);
             var len = bytes.byteLength;
             for (var i = 0; i < len; i++) {
-                binary += String.fromCharCode( bytes[ i ] );
+                binary += String.fromCharCode(bytes[i]);
             }
-            return window.btoa( binary );
+            return window.btoa(binary);
         }
     }
 

@@ -39,46 +39,27 @@
     <div ng-controller="fileContentController as fileCtrl">
         <h1>Hello</h1>
 
+        <div ng-switch="tabCtrl.fileContentType">
+            <div ng-switch-when="TEXT">
+                <textarea type="text" ng-model="tabCtrl.responseInformation"></textarea>
+            </div>
 
-        <span ng-click="fileCtrl.onClosePopupClicked()">Лахапета..</span>
+            <div ng-switch-when="IMAGE">
+                <img ng-src="{{tabCtrl.responseInformationUri}}"></img>
+            </div>
+
         </div>
-    </div>
 
+        <span ng-click="fileCtrl.onClosePopupClicked()">Close</span>
+    </div>
 </script>
 
 <!-- Темплейт табы -->
 <script type="text/ng-template" id="tabHtmlTemplate.html">
 
-    <div ng-controller="ctrlForTable as tabCtrl" ng-switch="tabCtrl.currentTabMode">
+    <div ng-controller="ctrlForTable as tabCtrl">
 
-        <div ng-switch-when="LOADING">
-            Loading... please wait
-        </div>
-
-        <div ng-switch-when="FILE_CONTENT" class="showContent">
-            <a href="javascript:void(0)" ng-click="tabCtrl.currentTabMode='FOLDER_LIST'">&lt; Назад в папку</a>
-            <hr />
-            <div ng-switch="tabCtrl.fileContentType">
-                <div ng-switch-when="TEXT">text will be here:
-                    <textarea type="text" ng-model="tabCtrl.responseInformation"></textarea>
-                </div>
-
-                <div ng-switch-when="IMAGE">Image is here:
-                    <img ng-src="{{tabCtrl.responseInformationUri}}"></img>
-                </div>
-
-            </div>
-        </div>
-
-        <div ng-switch-when="FOLDER_THUMBNAIL">
-            Thumbnails - to be done
-        </div>
-
-        <div ng-switch-when="FOLDER_TREE">
-            Tree - to be done
-        </div>
-
-        <div ng-switch-when="FOLDER_LIST">
+        <div >
             <div id="macDack" class="share" ng-mouseup="tabCtrl.onGetLinkOfDir()">
                 hello
                 <p>--</p>
