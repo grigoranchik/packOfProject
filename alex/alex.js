@@ -5,12 +5,21 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
     function ($scope, $timeout, $http, $q, ngDialog, alexandroService, grishanyaFactory) {
         var vm = this;
 
-        console.info("alexCtrl created.")
+
+        vm.functionFromController = function (arg1, arg2) {
+            return alexandroService.someUsefulFunction(arg1 + arg2);
+        };
+
+        console.info("alexCtrl created " + alexandroService.someUsefulFunction("grisha"));
     }
 ]);
 
 Alex_APP.service('alexandroService', ['$rootScope', '$timeout', '$q', function ($rootScope, $timeout, $q) {
     var srv = this;
+
+    srv.someUsefulFunction = function (coolArg) {
+        return "her-" + coolArg;
+    };
 
     console.info("alexandroService created.")
 }]);
@@ -26,17 +35,18 @@ Alex_APP.factory('grishanyaFactory', ['$rootScope', '$timeout', '$q', function (
     return myFactoryFn;
 }]);
 
-Alex_APP.directive('sashaDirective1', [function () {
+Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroService) {
     return {
         link: function (scope, element, attr) {
-
+            console.info("sashaDirective " + alexandroService.someUsefulFunction(attr['myCoolDirectiveArg1']));
         }
     }
 }]);
 
-Alex_APP.filter('myalexFilter1', [function () {
+Alex_APP.filter('myalexFilter1', ['alexandroService', function (alexandroService) {
     return function (input) {
 
+        console.info("myalexFilter1 called: " + alexandroService.someUsefulFunction("fuck"));
         return input;
     };
 }]);

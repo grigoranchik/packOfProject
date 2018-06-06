@@ -17,6 +17,7 @@
 
 
 </head>
+<!-- controller, filter, directive -->
 <body ng-app="alexApp">
 
     <style>
@@ -27,12 +28,12 @@
 
     </script>
 
-    <div ng-controller="alexCtrl as ctrl_1">
-        {{1+2}}
+    <div ng-controller="alexCtrl as ctrl_1" sasha-directive="" my-cool-directive-arg-1="{{ctrl_1.functionFromController(300, 366)}}">
+        {{1+2 | myalexFilter1}}
     </div>
 
     <div ng-controller="alexCtrl as ctrl_2">
-        {{3+2}}
+        {{3+2 | myalexFilter1}}
     </div>
 
 </body>
