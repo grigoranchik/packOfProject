@@ -27,8 +27,10 @@
 
     </script>
 
-    <div ng-controller="alexCtrl as ctrl_1" sasha-directive="" my-cool-directive-arg-1="{{ctrl_1.functionFromController(300, 366)}}">
-        {{ctrl_1.functionFromController(3.142323) | myalexFilter1 | myalexFilter1}}
+    <div ng-controller="alexCtrl as ctrl_1">
+        <div sasha-directive="" div-color-arg="green" div-time-arg="4000">
+            {{'hello from Kyiv' | limitTo:7}}
+        </div>
     </div>
 
 </body>
