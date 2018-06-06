@@ -45,8 +45,9 @@ Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroSer
 
 Alex_APP.filter('myalexFilter1', ['alexandroService', function (alexandroService) {
     return function (input) {
-
-        console.info("myalexFilter1 called: " + alexandroService.someUsefulFunction("fuck"));
-        return input;
+        if (!input) {
+            return "0.00";
+        }
+        return Math.round(input * 100) / 100
     };
 }]);
