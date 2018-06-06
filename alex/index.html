@@ -15,21 +15,20 @@
 
     <script src="alex.js" type="text/javascript"></script>
 
+    <style>
+
+    </style>
 
 </head>
 <!-- controller, filter, directive -->
 <body ng-app="alexApp">
-
-    <style>
-
-    </style>
 
     <script type="text/ng-template" id="myNewTemplate1.html">
 
     </script>
 
     <div ng-controller="alexCtrl as ctrl_1" sasha-directive="" my-cool-directive-arg-1="{{ctrl_1.functionFromController(300, 366)}}">
-        {{0 | myalexFilter1}}
+        {{ctrl_1.functionFromController(3.142323) | myalexFilter1 | myalexFilter1}}
     </div>
 
 </body>

@@ -5,23 +5,23 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
     function ($scope, $timeout, $http, $q, ngDialog, alexandroService, grishanyaFactory) {
         var vm = this;
 
-
-        vm.functionFromController = function (arg1, arg2) {
-            return alexandroService.someUsefulFunction(arg1 + arg2);
+        vm.functionFromController = function (arg1) {
+            return alexandroService.someUsefulFunction(arg1);
         };
-
-        console.info("alexCtrl created " + alexandroService.someUsefulFunction("grisha"));
     }
 ]);
 
 Alex_APP.service('alexandroService', ['$rootScope', '$timeout', '$q', function ($rootScope, $timeout, $q) {
     var srv = this;
 
-    srv.someUsefulFunction = function (coolArg) {
-        return "her-" + coolArg;
+    srv.someUsefulFunction = function (input) {
+        if (!input) {
+            return "#.##";
+        }
+        return Math.round(input * 100) / 100;
     };
 
-    console.info("alexandroService created.")
+
 }]);
 
 Alex_APP.factory('grishanyaFactory', ['$rootScope', '$timeout', '$q', function ($rootScope, $timeout, $q) {
@@ -45,9 +45,6 @@ Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroSer
 
 Alex_APP.filter('myalexFilter1', ['alexandroService', function (alexandroService) {
     return function (input) {
-        if (!input) {
-            return "0.00";
-        }
-        return Math.round(input * 100) / 100
+        return alexandroService.someUsefulFunction(input);
     };
 }]);
