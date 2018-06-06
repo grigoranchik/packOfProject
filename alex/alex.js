@@ -26,8 +26,6 @@ Alex_APP.factory('grishanyaFactory', ['$rootScope', '$timeout', '$q', function (
     return myFactoryFn;
 }]);
 
-
-
 Alex_APP.directive('sashaDirective1', [function () {
     return {
         link: function (scope, element, attr) {
