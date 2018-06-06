@@ -68,18 +68,20 @@ app.get('/view/:fileAbsolutePath', function (req, res) {
     res.sendFile(path.join(filePath), options);
 });
 
-/*app.post('/view', function (req, res) {
-    var options = {
+app.get('/makeNewFile/:fileAbsolutePath/:nameFile', function (req, res) {
+    var filePath =  req.params.fileAbsolutePath + req.params.nameFile;
+    fs.writeFile(filePath, function(err) {
 
-        headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true,
-            'Content-Type': 'image/gif'
-        }
-    };
+        if(err) throw err;
 
-    res.sendFile(path.join(req.body.newPath), options);
-});*/
+        console.log("The file was created!");
+
+    });
+
+
+    res.end('The file was created!');
+});
+
 
 app.post('/makeNewFolder', function (req, res) {
     fs.mkdir('c:/boot/writeme', function() { //req.body.newPath + '//ru'

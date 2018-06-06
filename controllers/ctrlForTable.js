@@ -10,21 +10,49 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
 
         vm.pathTable = 'C://';
         vm.renderDataTable = [];
-        vm.massIdexOf = [];
         vm.massOfButton = 0;
         vm.haveLinkOfDir = '';
 
         vm.currentTabMode = 'LOADING';
 
-        $scope.$watch(function () {
-            return vm.renderDataTable;
-        }, function (newValue, oldValue) {
-            var million = 1000000;
-            for (var i = 0; i < newValue.length; i++) {
-                vm.massIdexOf[i] = million;
-                million++;
+        vm.onMakeNewFile = function (event, value) {
+            //var evtobj = event? event : e
+
+
+            if (event.keyCode == 115 && event.shiftKey) { //ctrl + z
+                var path;
+                if(value.typeOfFile != 'undefined'){
+                    if (vm.pathTable == 'C://') {
+                        if ((value.typeOfFile == 'file')) {
+                            path = vm.pathTable;
+                        }
+                        if ((value.typeOfFile == 'folder')) {
+                            path = vm.pathTable + value.renderFileName + '//';
+                        }
+                    } else {
+
+                        if ((value.typeOfFile != '') || (value.typeOfFile == 'file')) {
+                            path = vm.pathTable + '//';
+                        }
+                        if ((value.typeOfFile != '') || (value.typeOfFile == 'folder')) {
+                            path = vm.pathTable + '//' + value.renderFileName + '//';
+                        }
+
+                    }
+                    var nameFile = prompt('назовите ваш файл', 100);
+                    var fileContentUri = '/makeNewFile' + '/' + encodeURIComponent(path) + '/' + nameFile;
+                    var promise = $http.get(fileContentUri, {});
+                    promise.then(function (response) {
+                        console.log('The file was created!');
+                    });
+                }else{
+                    alert('don\'t access');
+                }
+
+
             }
-        });
+        }
+
 
         vm.onHaveLinkOfDir = function (val) {
             //debugger;
@@ -33,6 +61,8 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
             } else {
                 vm.haveLinkOfDir = vm.pathTable + '//' + val.renderFileName;
             }
+
+
         };
 
         vm.cleanLinkOfDir = function () {
@@ -44,20 +74,6 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
             vm.pathTable = selectedTabName;
             sendMessage();
             console.info('Select me: ' + selectedTabName);
-        };
-
-        vm.hideElem = function () {
-            var a = document.body.children[3].children[0].children[1].children[1];
-
-            a.style.display = 'none';
-
-        };
-        vm.showElem = function () {
-            //console.log(document.body.children[3]);
-            var a = document.body.children[3].children[0].children[1].children[1];
-
-            a.style.display = 'block';
-
         };
 
         vm.onCloseTabButtonClicked = function (removingTabId) {
@@ -83,21 +99,25 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
         };
 
         vm.onSendEnterInTable = function (val) {
-            //debugger;
-            if (val.renderFileName != 'UP') {//углубляемся в папку
-                if (vm.pathTable == 'C://') {
-                    vm.pathTable += val.renderFileName;
-                } else {
-                    vm.pathTable += '//' + val.renderFileName;
+            if (val.typeOfFile == 'file') {
+                vm.viewDocument(val);
+            } else {
+                if (val.renderFileName != 'UP') {//углубляемся в папку
+                    if (vm.pathTable == 'C://') {
+                        vm.pathTable += val.renderFileName;
+                    } else {
+                        vm.pathTable += '//' + val.renderFileName;
+                    }
+                } else {//выходим из нее
+                    if ((vm.pathTable.lastIndexOf("//") != 2)) {
+                        vm.pathTable = vm.pathTable.substring(0, vm.pathTable.lastIndexOf("//"));
+                    } else
+                        vm.pathTable = vm.pathTable.substring(0, vm.pathTable.lastIndexOf("//") + 2);
                 }
-            } else {//выходим из нее
-                if ((vm.pathTable.lastIndexOf("//") != 2)) {
-                    vm.pathTable = vm.pathTable.substring(0, vm.pathTable.lastIndexOf("//"));
-                } else
-                    vm.pathTable = vm.pathTable.substring(0, vm.pathTable.lastIndexOf("//") + 2);
+
+                sendMessage();
             }
 
-            sendMessage();
         };
 
 
@@ -161,41 +181,8 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
                 case 114: //f3 View
                     event.stopPropagation(); //cancelBubble = true;
                     event.preventDefault();
-                    //debugger;
-                    var path;
-                    if (vm.pathTable != 'C://') {
-                        path = vm.pathTable + '//' + val.renderFileName;
-                    } else {
-                        path = vm.pathTable + val.renderFileName;
-                    }
-
-                    var fileContentUri = '/view' + '/' + encodeURIComponent(path);
-                    if (val.renderFileName.indexOf(".png") > -1
-                        || val.renderFileName.indexOf(".jpg") > -1
-                        || val.renderFileName.indexOf(".gif") > -1) {
-
-                        vm.responseInformationUri = fileContentUri;
-                        vm.fileContentType = 'IMAGE';
-                        ngDialog.open({
-                            template: 'fileContentHtmlTemplate.html',
-                            className: 'ngdialog-theme-default',
-                            scope: $scope
-                        });
-                    } else {
-                        vm.fileContentType = 'TEXT';
-                        var promise = $http.get(fileContentUri, {});
-                        promise.then(function (response) {
-                            ngDialog.open({
-                                template: 'fileContentHtmlTemplate.html',
-                                className: 'ngdialog-theme-default',
-                                scope: $scope
-                            });
-                            vm.responseInformation = response.data;
-                        });
-                    }
-
-
-                    vm.currentTabMode = 'FILE_CONTENT';
+                    debugger;
+                    vm.viewDocument(val);
 
                     break;
                 case 115: //f4 Edit
@@ -239,6 +226,45 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
             }
 
 
+        }
+        vm.viewDocument = function (val) {
+            //debugger;
+            var path;
+            if (vm.pathTable != 'C://') {
+                path = vm.pathTable + '//' + val.renderFileName;
+            } else {
+                path = vm.pathTable + val.renderFileName;
+            }
+
+            var fileContentUri = '/view' + '/' + encodeURIComponent(path);
+            if (val.renderFileName.indexOf(".png") > -1
+                || val.renderFileName.indexOf(".jpg") > -1
+                || val.renderFileName.indexOf(".gif") > -1) {
+
+                vm.responseInformationUri = fileContentUri;
+                vm.fileContentType = 'IMAGE';
+                ngDialog.open({
+                    template: 'fileContentHtmlTemplate.html',
+                    closeByEscape: true,
+                    className: 'ngdialog-theme-default',
+                    scope: $scope
+                });
+            } else {
+                vm.fileContentType = 'TEXT';
+                var promise = $http.get(fileContentUri, {});
+                promise.then(function (response) {
+                    ngDialog.open({
+                        template: 'fileContentHtmlTemplate.html',
+                        closeByEscape: true,
+                        className: 'ngdialog-theme-default',
+                        scope: $scope
+                    });
+                    vm.responseInformation = response.data;
+                });
+            }
+
+
+            vm.currentTabMode = 'FILE_CONTENT';
         }
 
         vm.pressEnter = function (event, index, val) {
