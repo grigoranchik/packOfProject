@@ -27,10 +27,22 @@
 
     </script>
 
-    <div ng-controller="alexCtrl as ctrl_1">
-        <div sasha-directive="" div-color-arg="green" div-time-arg="4000">
-            {{'hello from Kyiv' | limitTo:7}}
+    <div ng-controller="alexCtrl as ctrl_1" ng-init="isLabelShow=false">
+
+        <div ng-if="isLabelShow" ng-init="text=''" sasha-directive="" div-color-arg="green" div-time-arg="4000">
+
+            <textarea style="width:500px; height:300px; background-color: aqua" ng-model="text">
+
+            </textarea>
+
+            <div style="width:500px; height:300px; background-color: yellow">
+                {{text}}
+
+            </div>
+
         </div>
+
+        <button ng-click="isLabelShow=!isLabelShow">{{ isLabelShow ? 'hide' : 'show' }} label</button>
     </div>
 
 </body>

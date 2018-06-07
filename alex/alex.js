@@ -39,7 +39,7 @@ Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroSer
         link: function (scope, element, attr) {
             var extendeElem = $(element);
             extendeElem.css('color', attr['divColorArg']);
-            extendeElem.fadeOut(parseInt(attr['divTimeArg']));
+            //extendeElem.fadeOut(parseInt(attr['divTimeArg']));
         }
     }
 }]);
