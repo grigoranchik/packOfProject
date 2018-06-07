@@ -29,7 +29,7 @@
 
     </script>
 
-    <div ng-controller="alexCtrl as ctrl_1" ng-init="isLabelShow=false">
+    <div ng-controller="alexCtrl as ctrl_1" ng-init="isLabelShow=true">
 
         <div ng-if="isLabelShow" ng-init="text=''" sasha-directive="" div-color-arg="green" div-time-arg="4000">
 
@@ -37,7 +37,7 @@
 
             </textarea>
 
-            <div style="width:500px; height:300px; background-color: yellow" ng-bind-html="text | lineBreakFilter">
+            <div ng-if="false" style="width:500px; height:300px; background-color: yellow" ng-bind-html="text | lineBreakFilter">
 
             </div>
 
