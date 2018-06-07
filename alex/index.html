@@ -31,13 +31,12 @@
 
         <div ng-if="isLabelShow" ng-init="text=''" sasha-directive="" div-color-arg="green" div-time-arg="4000">
 
-            <textarea style="width:500px; height:300px; background-color: aqua" ng-model="text">
+            <textarea style="width:500px; height:300px; background-color: aqua" ng-keydown="myKeydown($event)" ng-model="text">
 
             </textarea>
 
             <div style="width:500px; height:300px; background-color: yellow">
-                {{text}}
-
+                <div ng-bind-html="text | lineBreakFilter"></div>
             </div>
 
         </div>

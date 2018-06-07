@@ -40,3 +40,11 @@ Alex_APP.filter('myalexFilter1', [function () {
         return input;
     };
 }]);
+
+
+Alex_APP.filter('lineBreakFilter', ['alexandroService', '$sce', function (alexandroService, $sce) {
+    return function (input) {
+        var myInput = input.replace(/(\r\n|\n|\r)/gm, '<br />');
+        return $sce.trustAsHtml(myInput);
+    };
+}]);

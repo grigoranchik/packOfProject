@@ -44,8 +44,9 @@ Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroSer
     }
 }]);
 
-Alex_APP.filter('myalexFilter1', ['alexandroService', function (alexandroService) {
+Alex_APP.filter('lineBreakFilter', ['alexandroService', '$sce', function (alexandroService, $sce) {
     return function (input) {
-        return input + 'fuck-fuck';
+        var myInput = input.replace(/(\r\n|\n|\r)/gm, '<br />');
+        return $sce.trustAsHtml(myInput);
     };
 }]);
