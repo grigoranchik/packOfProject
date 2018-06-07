@@ -31,13 +31,13 @@
 
     <div ng-controller="alexCtrl as ctrl_1" ng-init="isLabelShow=true">
 
-        <div ng-if="isLabelShow" ng-init="text=''" sasha-directive="" div-color-arg="green" div-time-arg="4000">
+        <div ng-if="isLabelShow" sasha-directive="" div-color-arg="green" div-time-arg="4000">
 
             <textarea style="width:500px; height:300px; background-color: aqua" ng-model="text">
 
             </textarea>
 
-            <div ng-if="false" style="width:500px; height:300px; background-color: yellow" ng-bind-html="text | lineBreakFilter">
+            <div ng-if="text && text.length > 0 ? true : false" style="width:500px; height:300px; background-color: yellow" ng-bind-html="ctrl_1.text | lineBreakFilter">
 
             </div>
 
