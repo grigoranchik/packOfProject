@@ -19,7 +19,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
             }
         }
 
-        $scope.$watch(function () {
+        /*$scope.$watch(function () {
             return vm.mySymbol;
         }, function (prev, next) {
             myFunc(next, prev);
@@ -29,7 +29,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
             return vm.myNumberRepeat;
         }, function (prev, next) {
             myFunc(next, prev)
-        });
+        });*/
 
         vm.functionFromController = function (arg1) {
             return alexandroService.someUsefulFunction(arg1);
@@ -70,10 +70,8 @@ Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroSer
     }
 }]);
 
-Alex_APP.filter('lineBreakFilter', ['alexandroService', '$sce', function (alexandroService, $sce) {
+Alex_APP.filter('multiplierFilter', ['alexandroService', '$sce', function (alexandroService, $sce) {
     return function (input) {
-
-        /*var myInput = "<div ng-repeat=" + input + "track by ctrl_1.mySymbol></div>";
-        return $sce.trustAsHtml(myInput);*/
+        return input;
     };
 }]);
