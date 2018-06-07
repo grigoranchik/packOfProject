@@ -9,6 +9,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         vm.functionFromController = function (arg1) {
             return alexandroService.someUsefulFunction(arg1);
         };
+
     }
 ]);
 
@@ -46,6 +47,11 @@ Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroSer
 
 Alex_APP.filter('lineBreakFilter', ['alexandroService', '$sce', function (alexandroService, $sce) {
     return function (input) {
+        if(input.length<=255){
+
+        }else{
+
+        }
         var myInput = input.replace(/(\r\n|\n|\r)/gm, '<br />');
         return $sce.trustAsHtml(myInput);
     };
