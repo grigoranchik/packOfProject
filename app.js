@@ -19,6 +19,11 @@ app.get('/controllers/:id', function (req, res) {
     //res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+app.get('/services/:id', function (req, res) {
+    res.sendFile(path.join(__dirname + '/services/' + req.params.id));
+    //res.sendFile(path.join(__dirname + '/index.html'));
+});
+
 app.post('/del', function (req, res) {
     //req.body.newPathDel
     if(req.body.typeOfFile == 'file'){

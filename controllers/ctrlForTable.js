@@ -19,7 +19,7 @@ MY_TOTAL_APP.controller('ctrlForTable', ['$scope', '$timeout', '$http', '$q', 'n
             //var evtobj = event? event : e
 
 
-            if (event.keyCode == 115 && event.shiftKey) { //ctrl + z
+            if (event.keyCode == 115 && event.shiftKey) {
                 var path;
                 if(value.typeOfFile != 'undefined'){
                     if (vm.pathTable == 'C://') {
