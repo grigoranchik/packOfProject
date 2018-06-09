@@ -38,9 +38,28 @@
     <div ng-controller="alexCtrl as ctrl_1">
         <div ng-model="ctrl_1.myResponseInformations">
             <table cellspacing="0" cellpadding="0">
-                <tr ng-repeat="value in ctrl_1.myResponseInformations | myFilter track by $index">
-                    <td valign="top" ng-style="{'background-color': $index % 2 == 0 ? '#DCDCDC' : '#FFFAFA' }">{{value}}</td>
+                <tr>
+                    <td>
+                        select
+                    </td>
+                    <td>
+                        -= {{ctrl_1.myResultOfCheckbox}} =-
+                    </td>
                 </tr>
+                <tr ng-repeat="value in ctrl_1.myResponseInformations | myFilter track by $index">
+                    <td>
+                        <input type="checkbox" ng-model="confirmed" ng-change="ctrl_1.myChangeOfCheckbox(value, confirmed)">
+                    </td>
+                    <td valign="top"
+                        ng-controller="yacheykaController as valCtrl"
+                        directive-from-some-repeat="{{value}}"
+                        ng-mouseenter="myMouseEnter(value)"
+                        ng-mouseleave="myMouseLeave(value)"
+                        ng-style="{'background-color': $index % 2 == 0 ? '#DCDCDC' : '#FFFAFA', 'color': myColor }">
+                        {{value}}
+                    </td>
+                </tr>
+
             </table>
         </div>
     </div>

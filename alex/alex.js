@@ -1,8 +1,8 @@
 var Alex_APP = angular.module("alexApp", ['ngDialog']);
 
-Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog', 'alexandroService', 'grishanyaFactory',
+Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog', 'alexandroService',
 
-    function ($scope, $timeout, $http, $q, ngDialog, alexandroService, grishanyaFactory) {
+    function ($scope, $timeout, $http, $q, ngDialog, alexandroService) {
         var vm = this;
 
         vm.myResponseInformations = [];
@@ -12,6 +12,27 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         }).catch(function (error) {
             console.log('error: ' + error.status);
         });
+
+        vm.myResultOfCheckbox = 0;
+
+        vm.myChangeOfCheckbox = function (value, confirmed) {
+
+            if (confirmed == true) {
+                vm.myResultOfCheckbox += value;
+            } else {
+                if (confirmed == false) {
+                    vm.myResultOfCheckbox -= value;
+                }
+            }
+
+        };
+
+    }
+]);
+
+Alex_APP.controller('yacheykaController', ['$scope', '$timeout', '$rootScope',
+    function ($scope, $timeout, $rootScope) {
+        var vm = this;
 
     }
 ]);
@@ -32,19 +53,42 @@ Alex_APP.service('alexandroService', ['$rootScope', '$timeout', '$q', function (
 
 }]);
 
-Alex_APP.factory('grishanyaFactory', ['$rootScope', '$timeout', '$q', function ($rootScope, $timeout, $q) {
-
-    var myFactoryFn = function (someArgument) {
-        var srv = this;
-    };
-
-    return myFactoryFn;
-}]);
-
-Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroService) {
+Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope', function (alexandroService, $rootScope) {
     return {
         link: function (scope, element, attr) {
-            var extendeElem = $(element);
+
+            var thisElementValue = parseInt(attr['directiveFromSomeRepeat']);
+            var myCSS;
+
+
+            scope.myMouseEnter = function (value) {
+                $rootScope.$broadcast('myCustomEvent', {
+                    someProp: value
+                });
+            };
+
+            scope.myMouseLeave = function (value) {
+                $rootScope.$broadcast('myCustomEventBackChange', {
+                    someProp: value
+                });
+            };
+
+            $rootScope.$on('myCustomEvent', function (event, value) {
+
+                if (thisElementValue == value.someProp) {
+                    //scope.myColor = 'red';
+                    myCSS = $(element).css('background-color');
+                    $(element).css('background-color', 'green');
+                }
+            });
+            $rootScope.$on('myCustomEventBackChange', function (event, value) {
+
+                if (thisElementValue == value.someProp) {
+                    $(element).css('background-color', myCSS);
+                    //scope.myColor = 'black';
+                }
+            });
+
         }
     }
 }]);
