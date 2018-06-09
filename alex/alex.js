@@ -12,13 +12,27 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
             _.forEach(response, function (val, index) {
                 vm.myResponseInformations.push({
                     elementIntValue: val,
-                    isElementSelected: false
+                    isElementSelected: false,
+                    isElementHighlighted: false
                 });
             });
 
         }).catch(function (error) {
             console.log('error: ' + error.status);
         });
+
+        $scope.myMouseEnter = function (value) {
+            $rootScope.$broadcast('myCustomEvent', value);
+            _.forEach(vm.myResponseInformations, function (elem, index) {
+                elem.isElementHighlighted = value.elementIntValue === elem.elementIntValue;
+            })
+        };
+
+        $scope.myMouseLeave = function (value) {
+            _.forEach(vm.myResponseInformations, function (elem, index) {
+                elem.isElementHighlighted = false;
+            })
+        };
 
         $scope.delNumber = function (index) {
             var isYes = confirm("удалить строку?");
@@ -36,7 +50,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         $scope.$watch(function () {
             return vm.myResponseInformations;
         }, function () {
-
+            console.info("Array changed.");
             vm.myResultOfCheckbox = 0;
             _.forEach(vm.myResponseInformations, function (elem, index) {
                 if (elem.isElementSelected == true) {
@@ -44,13 +58,6 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
                 }
             })
         }, true);
-
-    }
-]);
-
-Alex_APP.controller('yacheykaController', ['$scope', '$timeout', '$rootScope',
-    function ($scope, $timeout, $rootScope) {
-        var vm = this;
 
     }
 ]);
@@ -71,44 +78,19 @@ Alex_APP.service('alexandroService', ['$rootScope', '$timeout', '$q', function (
 
 }]);
 
-Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope', function (alexandroService, $rootScope) {
-    return {
-        link: function (scope, element, attr) {
+Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope', '$timeout',
+    function (alexandroService, $rootScope, $timeout) {
 
-            var thisElementValue = parseInt(attr['directiveFromSomeRepeat']);
+        return {
+            link: function (scope, element, attr) {
+
+                var thisElementValue = parseInt(attr['directiveFromSomeRepeat']);
 
 
-            scope.isHighlighted = false;
-
-            scope.myMouseEnter = function (value, index) {
-                //debugger;
-                $rootScope.$broadcast('myCustomEvent', {
-                    someProp: value.elementIntValue
-                });
-            };
-
-            scope.myMouseLeave = function (value) {
-                $rootScope.$broadcast('myCustomEventBackChange', {
-                    someProp: value.elementIntValue
-                });
-            };
-
-            $rootScope.$on('myCustomEvent', function (event, value) {
-
-                if (thisElementValue == value.someProp) {
-                    scope.isHighlighted = true;
-                } else {
-                    scope.isHighlighted = false;
-                }
-            });
-
-            $rootScope.$on('myCustomEventBackChange', function (event, value) {
-                scope.isHighlighted = false;
-            });
+            }
         }
-    }
-}]);
-
+    }]);
+/*
 Alex_APP.filter('myFilter', ['alexandroService', '$sce', '$rootScope', function (alexandroService, $sce, $rootScope) {
     return function (input) {
 
@@ -119,3 +101,4 @@ Alex_APP.filter('myFilter', ['alexandroService', '$sce', '$rootScope', function 
         return positiveArr;
     };
 }]);
+*/

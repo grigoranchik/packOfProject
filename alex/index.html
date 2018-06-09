@@ -37,6 +37,7 @@
 
     <div ng-controller="alexCtrl as ctrl_1">
         <div ng-model="ctrl_1.myResponseInformations">
+
             <table cellspacing="0" cellpadding="0">
                 <tr>
                     <td>
@@ -48,17 +49,17 @@
                         {{ctrl_1.myResultOfCheckbox}}
                     </td>
                 </tr>
-                <tr ng-repeat="value in ctrl_1.myResponseInformations | myFilter track by $index">
+                <tr ng-repeat="value in ctrl_1.myResponseInformations">
                     <td>
                         <input type="checkbox" ng-model="ctrl_1.myResponseInformations[$index].isElementSelected">
                     </td>
                     <td
                         directive-from-some-repeat="{{value.elementIntValue}}"
-                        ng-mouseenter="myMouseEnter(value, $index)"
+                        ng-mouseenter="myMouseEnter(value)"
                         ng-mouseleave="myMouseLeave(value)"
-                        ng-style="{'background-color': isHighlighted ? 'green' : ($index % 2 == 0 ? '#DCDCDC' : '#FFFAFA') }">
+                        ng-style="{'background-color': value.isElementHighlighted ? 'green' : ($index % 2 == 0 ? '#DCDCDC' : '#FFFAFA') }">
                         {{value.elementIntValue}}
-                    </td> <!--ng-controller="yacheykaController as valCtrl"-->
+                    </td>
                     <td>
                         <button ng-click="delNumber($index)" >del</button>
                     </td>
