@@ -6,44 +6,36 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         var vm = this;
 
         vm.myResponseInformations = [];
+        vm.myResultOfCheckbox = 0;
 
         alexandroService.giveMeTheFuckingData().then(function (response) {
-            vm.myResponseInformations = response;
+            _.forEach(response, function (val, index) {
+                vm.myResponseInformations.push({
+                    elementIntValue: val,
+                    isElementSelected: false
+                });
+            });
+
         }).catch(function (error) {
             console.log('error: ' + error.status);
         });
 
-        vm.myResultOfCheckbox = 0;
-
-        vm.myChangeOfCheckbox = function (value, confirmed) {
-
-            if (confirmed == true) {
-                vm.myResultOfCheckbox += value;
-            } else {
-                if (confirmed == false) {
-                    vm.myResultOfCheckbox -= value;
-                }
-            }
+        vm.changeMainCheckbox = function (confirmed) {
+            _.forEach(vm.myResponseInformations, function (elem, index) {
+                elem.isElementSelected = confirmed;
+            })
         };
 
-        vm.valueAllCheckbox;
-        vm.summOfAllCheckbox;
-        $rootScope.$on('myEventOfMassChechbox', function (event, value) {
-            vm.summOfAllCheckbox = value.someProp;
-        });
-
-        vm.changeMainCheckbox = function (confirmed) {
-            vm.valueAllCheckbox = confirmed;
-            if (confirmed == true) {
-                vm.myResultOfCheckbox = vm.summOfAllCheckbox;
-            } else {
-                if (confirmed == false) {
-                    vm.myResultOfCheckbox = 0;
+        $scope.$watch(function () {
+            return vm.myResponseInformations;
+        }, function () {
+            vm.myResultOfCheckbox = 0;
+            _.forEach(vm.myResponseInformations, function (elem, index) {
+                if (elem.isElementSelected == true) {
+                    vm.myResultOfCheckbox += elem.elementIntValue;
                 }
-
-            }
-
-        }
+            })
+        }, true);
     }
 ]);
 
@@ -80,13 +72,13 @@ Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope',
 
             scope.myMouseEnter = function (value) {
                 $rootScope.$broadcast('myCustomEvent', {
-                    someProp: value
+                    someProp: value.elementIntValue
                 });
             };
 
             scope.myMouseLeave = function (value) {
                 $rootScope.$broadcast('myCustomEventBackChange', {
-                    someProp: value
+                    someProp: value.elementIntValue
                 });
             };
 
@@ -102,7 +94,6 @@ Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope',
 
                 if (thisElementValue == value.someProp) {
                     $(element).css('background-color', myCSS);
-                    //scope.myColor = 'black';
                 }
             });
 
@@ -112,17 +103,9 @@ Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope',
 
 Alex_APP.filter('myFilter', ['alexandroService', '$sce', '$rootScope', function (alexandroService, $sce, $rootScope) {
     return function (input) {
+
         var positiveArr = input.filter(function (number) {
-            return number > 0;
-        });
-
-        var summMassElem = 0;
-        positiveArr.forEach(function (item, i, arr) {
-            summMassElem += item;
-        });
-
-        $rootScope.$broadcast('myEventOfMassChechbox', {
-            someProp: summMassElem
+            return number.elementIntValue > 0;
         });
 
         return positiveArr;

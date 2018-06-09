@@ -40,7 +40,9 @@
             <table cellspacing="0" cellpadding="0">
                 <tr>
                     <td>
-                        <input type="checkbox" ng-model="confirmed" ng-change="ctrl_1.changeMainCheckbox(confirmed)">
+                        <input type="checkbox"
+                               ng-model="confirmed"
+                               ng-change="ctrl_1.changeMainCheckbox(confirmed)">
                     </td>
                     <td>
                         {{ctrl_1.myResultOfCheckbox}}
@@ -48,15 +50,15 @@
                 </tr>
                 <tr ng-repeat="value in ctrl_1.myResponseInformations | myFilter track by $index">
                     <td>
-                        <input type="checkbox" ng-model="confirmed" ng-checked="ctrl_1.valueAllCheckbox" ng-change="ctrl_1.myChangeOfCheckbox(value, confirmed)">
+                        <input type="checkbox" ng-model="ctrl_1.myResponseInformations[$index].isElementSelected">
                     </td>
                     <td valign="top"
                         ng-controller="yacheykaController as valCtrl"
-                        directive-from-some-repeat="{{value}}"
+                        directive-from-some-repeat="{{value.elementIntValue}}"
                         ng-mouseenter="myMouseEnter(value)"
                         ng-mouseleave="myMouseLeave(value)"
                         ng-style="{'background-color': $index % 2 == 0 ? '#DCDCDC' : '#FFFAFA', 'color': myColor }">
-                        {{value}}
+                        {{value.elementIntValue}}
                     </td>
                 </tr>
 
