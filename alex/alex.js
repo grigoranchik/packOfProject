@@ -77,28 +77,3 @@ Alex_APP.service('alexandroService', ['$rootScope', '$timeout', '$q', function (
     };
 
 }]);
-
-Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope', '$timeout',
-    function (alexandroService, $rootScope, $timeout) {
-
-        return {
-            link: function (scope, element, attr) {
-
-                var thisElementValue = parseInt(attr['directiveFromSomeRepeat']);
-
-
-            }
-        }
-    }]);
-/*
-Alex_APP.filter('myFilter', ['alexandroService', '$sce', '$rootScope', function (alexandroService, $sce, $rootScope) {
-    return function (input) {
-
-        var positiveArr = input.filter(function (number) {
-            return number.elementIntValue > 0;
-        });
-
-        return positiveArr;
-    };
-}]);
-*/
