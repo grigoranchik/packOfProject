@@ -52,16 +52,15 @@
                     <td>
                         <input type="checkbox" ng-model="ctrl_1.myResponseInformations[$index].isElementSelected">
                     </td>
-                    <td valign="top"
-                        ng-controller="yacheykaController as valCtrl"
+                    <td
                         directive-from-some-repeat="{{value.elementIntValue}}"
-                        ng-mouseenter="myMouseEnter(value)"
+                        ng-mouseenter="myMouseEnter(value, $index)"
                         ng-mouseleave="myMouseLeave(value)"
                         ng-style="{'background-color': isHighlighted ? 'green' : ($index % 2 == 0 ? '#DCDCDC' : '#FFFAFA') }">
                         {{value.elementIntValue}}
-                    </td>
+                    </td> <!--ng-controller="yacheykaController as valCtrl"-->
                     <td>
-                        <button ng-click="ctrl_1.delNumber($index)">del</button>
+                        <button ng-click="delNumber($index)" >del</button>
                     </td>
                 </tr>
 

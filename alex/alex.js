@@ -20,6 +20,13 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
             console.log('error: ' + error.status);
         });
 
+        $scope.delNumber = function (index) {
+            var isYes = confirm("удалить строку?");
+            if (isYes == true) {
+                vm.myResponseInformations.splice(index, 1);
+            }
+        };
+
         vm.changeMainCheckbox = function (confirmed) {
             _.forEach(vm.myResponseInformations, function (elem, index) {
                 elem.isElementSelected = confirmed;
@@ -38,9 +45,6 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
             })
         }, true);
 
-        vm.delNumber = function(index){
-            vm.myResponseInformations.splice(index, 1);
-        };
     }
 ]);
 
@@ -73,9 +77,11 @@ Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope',
 
             var thisElementValue = parseInt(attr['directiveFromSomeRepeat']);
 
+
             scope.isHighlighted = false;
 
-            scope.myMouseEnter = function (value) {
+            scope.myMouseEnter = function (value, index) {
+                //debugger;
                 $rootScope.$broadcast('myCustomEvent', {
                     someProp: value.elementIntValue
                 });
@@ -91,7 +97,7 @@ Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope',
 
                 if (thisElementValue == value.someProp) {
                     scope.isHighlighted = true;
-                }else{
+                } else {
                     scope.isHighlighted = false;
                 }
             });
