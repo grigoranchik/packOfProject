@@ -72,8 +72,8 @@ Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope',
         link: function (scope, element, attr) {
 
             var thisElementValue = parseInt(attr['directiveFromSomeRepeat']);
-            var myCSS;
 
+            scope.isHighlighted = false;
 
             scope.myMouseEnter = function (value) {
                 $rootScope.$broadcast('myCustomEvent', {
@@ -90,18 +90,15 @@ Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope',
             $rootScope.$on('myCustomEvent', function (event, value) {
 
                 if (thisElementValue == value.someProp) {
-                    //scope.myColor = 'red';
-                    myCSS = $(element).css('background-color');
-                    $(element).css('background-color', 'green');
+                    scope.isHighlighted = true;
+                }else{
+                    scope.isHighlighted = false;
                 }
             });
+
             $rootScope.$on('myCustomEventBackChange', function (event, value) {
-
-                if (thisElementValue == value.someProp) {
-                    $(element).css('background-color', myCSS);
-                }
+                scope.isHighlighted = false;
             });
-
         }
     }
 }]);
