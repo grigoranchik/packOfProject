@@ -5,6 +5,14 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
     function ($scope, $timeout, $http, $q, ngDialog, alexandroService, grishanyaFactory) {
         var vm = this;
 
+        vm.myResponseInformations = [];
+
+        alexandroService.giveMeTheFuckingData().then(function (response) {
+            vm.myResponseInformations = response;
+        }).catch(function (error) {
+            console.log('error: ' + error.status);
+        });
+
     }
 ]);
 
@@ -15,7 +23,7 @@ Alex_APP.service('alexandroService', ['$rootScope', '$timeout', '$q', function (
         var deferred = $q.defer();
 
         $timeout(function () {
-            var fuckingData = [1, 4, 8, 0, 1, 2, 4, 7, 9, 0, 2, 4, 5, 11, 34, 7, 9, 0, 5, 1, 2, 9, 44, 2, 1, 42, 121, 34343, 12, 8, 9, 0, 3, 4];
+            var fuckingData = [3, 4, 5, 4, 5, 2, 3, 1, 4, 8, 0, 1, 2, 4, 7, 9, 0, 2, 4, 5, 11, 34, 7, 9, 0, 5, 1, 2, 9, 44, 2, 1, 42, 121, 34343, 12, 8, 9, 0, 3, 4];
             deferred.resolve(fuckingData);
         }, 1000);
 
@@ -41,8 +49,12 @@ Alex_APP.directive('sashaDirective', ['alexandroService', function (alexandroSer
     }
 }]);
 
-Alex_APP.filter('multiplierFilter', ['alexandroService', '$sce', function (alexandroService, $sce) {
+Alex_APP.filter('myFilter', ['alexandroService', '$sce', function (alexandroService, $sce) {
     return function (input) {
-        return input;
+        var positiveArr = input.filter(function (number) {
+            return number > 0;
+        });
+
+        return positiveArr;
     };
 }]);
