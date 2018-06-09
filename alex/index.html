@@ -40,15 +40,15 @@
             <table cellspacing="0" cellpadding="0">
                 <tr>
                     <td>
-                        select
+                        <input type="checkbox" ng-model="confirmed" ng-change="ctrl_1.changeMainCheckbox(confirmed)">
                     </td>
                     <td>
-                        -= {{ctrl_1.myResultOfCheckbox}} =-
+                        {{ctrl_1.myResultOfCheckbox}}
                     </td>
                 </tr>
                 <tr ng-repeat="value in ctrl_1.myResponseInformations | myFilter track by $index">
                     <td>
-                        <input type="checkbox" ng-model="confirmed" ng-change="ctrl_1.myChangeOfCheckbox(value, confirmed)">
+                        <input type="checkbox" ng-model="confirmed" ng-checked="ctrl_1.valueAllCheckbox" ng-change="ctrl_1.myChangeOfCheckbox(value, confirmed)">
                     </td>
                     <td valign="top"
                         ng-controller="yacheykaController as valCtrl"

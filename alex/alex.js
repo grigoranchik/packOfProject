@@ -1,8 +1,8 @@
 var Alex_APP = angular.module("alexApp", ['ngDialog']);
 
-Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog', 'alexandroService',
+Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog', 'alexandroService', '$rootScope',
 
-    function ($scope, $timeout, $http, $q, ngDialog, alexandroService) {
+    function ($scope, $timeout, $http, $q, ngDialog, alexandroService, $rootScope) {
         var vm = this;
 
         vm.myResponseInformations = [];
@@ -24,9 +24,26 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
                     vm.myResultOfCheckbox -= value;
                 }
             }
-
         };
 
+        vm.valueAllCheckbox;
+        vm.summOfAllCheckbox;
+        $rootScope.$on('myEventOfMassChechbox', function (event, value) {
+            vm.summOfAllCheckbox=value.someProp;
+        });
+
+        vm.changeMainCheckbox = function(confirmed){
+            vm.valueAllCheckbox = confirmed;
+            if(confirmed == true){
+                vm.myResultOfCheckbox = vm.summOfAllCheckbox;
+            }else{
+                if(confirmed == false){
+                    vm.myResultOfCheckbox = 0;
+                }
+
+            }
+
+        }
     }
 ]);
 
@@ -46,7 +63,7 @@ Alex_APP.service('alexandroService', ['$rootScope', '$timeout', '$q', function (
         $timeout(function () {
             var fuckingData = [3, 4, 5, 4, 5, 2, 3, 1, 4, 8, 0, 1, 2, 4, 7, 9, 0, 2, 4, 5, 11, 34, 7, 9, 0, 5, 1, 2, 9, 44, 2, 1, 42, 121, 34343, 12, 8, 9, 0, 3, 4];
             deferred.resolve(fuckingData);
-        }, 1000);
+        }, 100);
 
         return deferred.promise;
     };
@@ -93,10 +110,19 @@ Alex_APP.directive('directiveFromSomeRepeat', ['alexandroService', '$rootScope',
     }
 }]);
 
-Alex_APP.filter('myFilter', ['alexandroService', '$sce', function (alexandroService, $sce) {
+Alex_APP.filter('myFilter', ['alexandroService', '$sce', '$rootScope', function (alexandroService, $sce, $rootScope) {
     return function (input) {
         var positiveArr = input.filter(function (number) {
             return number > 0;
+        });
+
+        var summMassElem = 0;
+        positiveArr.forEach(function(item, i, arr) {
+            summMassElem += item;
+        });
+
+        $rootScope.$broadcast('myEventOfMassChechbox', {
+            someProp: summMassElem
         });
 
         return positiveArr;
