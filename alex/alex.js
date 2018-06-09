@@ -29,6 +29,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         $scope.$watch(function () {
             return vm.myResponseInformations;
         }, function () {
+
             vm.myResultOfCheckbox = 0;
             _.forEach(vm.myResponseInformations, function (elem, index) {
                 if (elem.isElementSelected == true) {
@@ -36,6 +37,10 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
                 }
             })
         }, true);
+
+        vm.delNumber = function(index){
+            vm.myResponseInformations.splice(index, 1);
+        };
     }
 ]);
 

@@ -60,6 +60,9 @@
                         ng-style="{'background-color': $index % 2 == 0 ? '#DCDCDC' : '#FFFAFA', 'color': myColor }">
                         {{value.elementIntValue}}
                     </td>
+                    <td>
+                        <button ng-click="ctrl_1.delNumber($index)">del</button>
+                    </td>
                 </tr>
 
             </table>
