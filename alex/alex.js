@@ -29,15 +29,15 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         vm.valueAllCheckbox;
         vm.summOfAllCheckbox;
         $rootScope.$on('myEventOfMassChechbox', function (event, value) {
-            vm.summOfAllCheckbox=value.someProp;
+            vm.summOfAllCheckbox = value.someProp;
         });
 
-        vm.changeMainCheckbox = function(confirmed){
+        vm.changeMainCheckbox = function (confirmed) {
             vm.valueAllCheckbox = confirmed;
-            if(confirmed == true){
+            if (confirmed == true) {
                 vm.myResultOfCheckbox = vm.summOfAllCheckbox;
-            }else{
-                if(confirmed == false){
+            } else {
+                if (confirmed == false) {
                     vm.myResultOfCheckbox = 0;
                 }
 
@@ -117,7 +117,7 @@ Alex_APP.filter('myFilter', ['alexandroService', '$sce', '$rootScope', function 
         });
 
         var summMassElem = 0;
-        positiveArr.forEach(function(item, i, arr) {
+        positiveArr.forEach(function (item, i, arr) {
             summMassElem += item;
         });
 
