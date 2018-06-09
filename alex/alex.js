@@ -22,7 +22,6 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         });
 
         $scope.myMouseEnter = function (value) {
-            $rootScope.$broadcast('myCustomEvent', value);
             _.forEach(vm.myResponseInformations, function (elem, index) {
                 elem.isElementHighlighted = value.elementIntValue === elem.elementIntValue;
             })
@@ -34,8 +33,8 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
             })
         };
 
-        $scope.delNumber = function (index) {
-            var isYes = confirm("удалить строку?");
+        $scope.delNumber = function (index, value) {
+            var isYes = confirm("удалить " + value.elementIntValue + '?');
             if (isYes == true) {
                 vm.myResponseInformations.splice(index, 1);
             }
