@@ -47,9 +47,10 @@
                     </td>
                     <td>
                         {{ctrl_1.myResultOfCheckbox}}
+                        <button ng-click="ctrl_1.buttonSort(ctrl_1.predicate)">{{ctrl_1.marc}}</button><!-- ↑ ↕ ↓ -->
                     </td>
                 </tr>
-                <tr ng-repeat="value in ctrl_1.myResponseInformations">
+                <tr ng-repeat="value in ctrl_1.myResponseInformations | orderBy: ctrl_1.predicate ">
                     <td>
                         <input type="checkbox" ng-model="ctrl_1.myResponseInformations[$index].isElementSelected">
                     </td>

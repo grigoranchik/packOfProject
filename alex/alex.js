@@ -7,6 +7,27 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
 
         vm.myResponseInformations = [];
         vm.myResultOfCheckbox = 0;
+        vm.predicate = '';
+        vm.marc = '↓';
+
+        vm.buttonSort = function(pred){
+            if(pred == ''){
+                vm.predicate ='elementIntValue';
+                vm.marc = '↑';
+            } else{
+                if(pred == 'elementIntValue'){
+                    vm.predicate ='-elementIntValue';
+                    vm.marc = '↕';
+                } else{
+                    if(pred == '-elementIntValue'){
+                        vm.predicate = '';
+                        vm.marc = '↓';
+                    }
+                }
+            }
+
+
+        }
 
         alexandroService.giveMeTheFuckingData().then(function (response) {
             _.forEach(response, function (val, index) {
