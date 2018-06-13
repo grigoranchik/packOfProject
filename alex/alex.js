@@ -5,8 +5,8 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
     function ($scope, $timeout, $http, $q, ngDialog, $rootScope) {
         var vm = this;
         vm.mass = new Array(4);
-        var index = 1;
 
+        var index = 1;
         for (var i = 0; i < 4; i++) {
             vm.mass[i] = new Array(4);
         }
@@ -26,6 +26,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
 
         vm.startGame = function () {
             var helpMass = [];
+            var getFuckOutReturn = false;
             var index = 0;
             for (var i = 0; i < 4; i++) {
                 for (var j = 0; j < 4; j++) {
@@ -49,6 +50,8 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
                         index++;
                     }
                 }
+                getFuckOutReturn = true;
+                return;
             }
 
             helpMass.sort(function () {
@@ -69,9 +72,8 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
 
                 }
             }
-            $rootScope.$broadcast('beginGameFocusFirstElem', {});
+            $rootScope.$broadcast('beginGame', {});
 
-            var stopRec = false;
             $scope.$watch(function () {
                 return vm.mass;
             }, function (prev, next) {
@@ -87,42 +89,13 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
                         }
                     }
                     if (myBool == true) {
-                        alert('я молодец! ' + 'мое время:' + vm.sec);
-                        vm.sec = '0';
-                        stopRec = true;
+                        //debugger;
+                        //myBool = false;
+                        alert('я молодец! ' + 'мое время:' + $scope.sec);
+                        $rootScope.$broadcast('stopGame', {});
                     }
                 }
             }, true);
-
-            var seconds = 0;
-            var min = 0;
-            var hour = 0;
-            vm.sec = '0';
-            vm.display = function () {
-                if (stopRec == false) {
-                    if (seconds > 59) {
-                        seconds = 0;
-                        min += 1;
-                    }
-                    if (min > 59) {
-                        min = 0;
-                        hour += 1;
-                    }
-                    if (hour > 23) {
-                        hour = 0;
-                    }
-                    seconds++;
-
-                    vm.sec = hour + ":" + min + ":" + seconds;
-                    $timeout(vm.display, 1000);
-
-                } else {
-                    return;
-                }
-
-            };
-
-            vm.display();
 
 
             $scope.$on('myCustomEventChangeColor', function (event, value) {
@@ -167,6 +140,15 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
                 })
 
             });
+
+            $scope.$watch(function () {
+                return getFuckOutReturn;
+            }, function () {
+                if (getFuckOutReturn == true) {
+                    debugger;
+                    return;
+                }
+            }, true);
 
         }
     }]);
@@ -216,6 +198,7 @@ Alex_APP.directive('emitDirective', ['$rootScope', function ($rootScope) {
                     }
                 }
                 if ((marc >= 1) && (marc <= 16)) {
+                    //debugger;
                     $rootScope.$broadcast('myCustomEventKeydown', {
                         someProp: marc,
                         whoSay: info
@@ -225,6 +208,7 @@ Alex_APP.directive('emitDirective', ['$rootScope', function ($rootScope) {
 
             $rootScope.$on('myCustomEventKeydown', function (event, value) {
                 if (info.staticIndex == value.someProp) {
+                    debugger;
                     extendeElem.focus();
                     $rootScope.$broadcast('myCustomEventChangeColor', {
                         from: value.whoSay,
@@ -234,10 +218,9 @@ Alex_APP.directive('emitDirective', ['$rootScope', function ($rootScope) {
 
             });
 
-            $rootScope.$on('beginGameFocusFirstElem', function (event, value) {
-
+            $rootScope.$on('beginGame', function (event, value) {
                 if (info.dynamicIndex == '') {
-                    //debugger;
+                    debugger;
                     $(element).focus();
 
                 }
