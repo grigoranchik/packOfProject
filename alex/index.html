@@ -34,7 +34,8 @@
                     ng-repeat="value in element"
                     style="text-align:center; font-size: 24pt; font-family: Arial"
                     ng-style="{'background-color': value.property == true ? '#FF69B4' : 'white'}"
-                    emit-directive="value">
+                    emit-directive="value"
+                    tabindex="{{value.staticIndex}}">
 
                     {{value.dynamicIndex}}
 
@@ -42,6 +43,9 @@
             </tr>
         </table>
 
+        <button ng-click="ctrl_1.startGame()">start game</button>
+        <button ng-click="ctrl_1.yaMolodets()">ya molodets..</button>
+        Time: {{ctrl_1.sec}}
 
     </div>
 
