@@ -99,7 +99,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
 
 
             $scope.$on('myCustomEventChangeColor', function (event, value) {
-                //debugger;
+                debugger;
 
                 for (var i = 0; i < 4; i++) {
                     for (var j = 0; j < 4; j++) {
@@ -172,6 +172,44 @@ Alex_APP.directive('emitDirective', ['$rootScope', function ($rootScope) {
                 }
             });
 
+            $rootScope.$on('myCustomEvent', function (event, value) {
+
+                if (info.property == true) {
+                    //debugger;
+                    var str = info.staticIndex - value.someProp.staticIndex;
+
+                    if (str == 1 || str == -1 || str == 4 || str == -4) {
+                        console.log('access');
+                        //debugger;
+                        $rootScope.$broadcast('myCustomEventChangeColor', {
+                            from: info,
+                            to: value.someProp
+                        });
+                    } else {
+                        console.log('no access');
+                    }
+                }
+            });
+
+            /*scope.nextStep = function(whoHave, whoWant){
+                if (whoHave.property != whoWant.property) {
+                    //debugger;
+                    var str = whoHave.staticIndex - whoWant.staticIndex;
+
+                    if (str == 1 || str == -1 || str == 4 || str == -4) {
+                        console.log('access');
+                        //debugger;
+                        $rootScope.$broadcast('myCustomEventChangeColor', {
+                            from: whoHave,
+                            to: whoWant
+                        });
+
+                    } else {
+                        console.log('no access');
+                    }
+                }
+            }*/
+
             extendeElem.keydown(function (event) {
                 //debugger;
                 var marc;
@@ -208,7 +246,7 @@ Alex_APP.directive('emitDirective', ['$rootScope', function ($rootScope) {
 
             $rootScope.$on('myCustomEventKeydown', function (event, value) {
                 if (info.staticIndex == value.someProp) {
-                    debugger;
+                    //debugger;
                     extendeElem.focus();
                     $rootScope.$broadcast('myCustomEventChangeColor', {
                         from: value.whoSay,
@@ -220,32 +258,11 @@ Alex_APP.directive('emitDirective', ['$rootScope', function ($rootScope) {
 
             $rootScope.$on('beginGame', function (event, value) {
                 if (info.dynamicIndex == '') {
-                    debugger;
+                    //debugger;
                     $(element).focus();
 
                 }
             });
-
-            $rootScope.$on('myCustomEvent', function (event, value) {
-
-                if (info.property == true) {
-                    //debugger;
-                    var str = info.staticIndex - value.someProp.staticIndex;
-
-                    if (str == 1 || str == -1 || str == 4 || str == -4) {
-                        console.log('access');
-                        //debugger;
-                        $rootScope.$broadcast('myCustomEventChangeColor', {
-                            from: info,
-                            to: value.someProp
-                        });
-                    } else {
-                        console.log('no access');
-                    }
-                }
-            });
-
-
         }
     }
 }]);
