@@ -12,7 +12,8 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
     }
 ]);
 
-Alex_APP.factory('grishanyaFactory', ['$rootScope', '$timeout', '$q', function ($rootScope, $timeout, $q) {
+Alex_APP.factory('grishanyaFactory', ['$rootScope', '$timeout', '$q',
+    function ($rootScope, $timeout, $q) {
 
     var myFactoryFn = function (userName) {
         var srv = this;
