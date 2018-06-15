@@ -15,7 +15,7 @@
 
     <script src="alex.js" type="text/javascript"></script>
     <script src="directiveTimer.js" type="text/javascript"></script>
-    <script src="myServis.js" type="text/javascript"></script>
+    <script src="myFactory.js" type="text/javascript"></script>
 
     <style>
 
@@ -34,6 +34,9 @@
             <tr ng-repeat="element in ctrl_1.mass">
                 <td height="100" width="100"
                     ng-repeat="value in element"
+                    emit-directive="value"
+                    ng-click="ctrl_1.clickNextStep(value.staticIndex)"
+                    ng-keydown="ctrl_1.keydownNextStep($event)"
                     style="text-align:center; font-size: 24pt; font-family: Arial"
                     ng-style="{'background-color': value.property == true ? '#FF69B4' : 'white'}"
                     tabindex="{{value.staticIndex}}">
@@ -44,7 +47,7 @@
             </tr>
         </table>
 
-        <input type="text" ng-model="ctrl_1.dimensionOfTheGame">{{ctrl_1.dimensionOfTheGame}}
+        <input type="number" min="0" max="10" size="5" ng-model="ctrl_1.dimensionOfTheGame">{{ctrl_1.dimensionOfTheGame}}
         <button ng-click="ctrl_1.newDimension()">dimension</button>
         <button ng-click="ctrl_1.startGame()">start game</button>
         <button ng-click="ctrl_1.yaMolodets()">ya molodets..</button>

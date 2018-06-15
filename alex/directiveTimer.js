@@ -26,6 +26,7 @@ Alex_APP.directive('directiveTimer', ['$rootScope', '$timeout', function ($rootS
 
                 } else {
                     //debugger;
+                    alert('я молодец! ' + 'мое время:' + scope.sec);
                     scope.sec = '0';
                     seconds = 0;
                     min = 0;
