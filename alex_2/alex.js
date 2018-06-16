@@ -5,7 +5,6 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
     function ($scope, $timeout, $http, $q, ngDialog) {
         var vm = this;
 
-        console.info("alexCtrl created.")
     }
 ]);
 

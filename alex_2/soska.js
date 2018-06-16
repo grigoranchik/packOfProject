@@ -15,5 +15,6 @@ angular.module("sosiApp").service('sosiService', ['$rootScope', '$timeout', '$q'
             }
 
         }, 600);
+
     };
 }]);
