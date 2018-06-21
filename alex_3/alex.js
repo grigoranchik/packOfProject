@@ -20,9 +20,15 @@ Alex_APP.filter('myFilter', ['$sce', function ($sce) {
             var searchWords = searchPhrase.split(' ');
 
             _.forEach(searchWords, function (word, i) {
+
+                if (word == undefined || word.length < 2) {
+                    return;
+                }
+
                 var regEx = new RegExp('[\s]*(' + word + ')[\s]*', 'ig');
-                innerHTML = innerHTML.replace(regEx, highlightPattern);
+                innerHTML = innerHTML.replace(regEx, '');
             });
+
         }
 
         return $sce.trustAsHtml(innerHTML);
