@@ -12,10 +12,10 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q',
 
 Alex_APP.filter('myFilter', ['$sce', function ($sce) {
     return function (input, searchPhrase) {
-        // input = " " + input + " ";
+
         var innerHTML = input;
 
-        if ((input != undefined) && (searchPhrase != undefined)) {
+        if (input != undefined && searchPhrase != undefined) {
             var highlightPattern = "<span class='highlight'>$&</span>";
             var searchWords = searchPhrase.split(' ');
 
@@ -23,13 +23,7 @@ Alex_APP.filter('myFilter', ['$sce', function ($sce) {
                 var regEx = new RegExp('[\s]*(' + word + ')[\s]*', 'ig');
                 innerHTML = innerHTML.replace(regEx, highlightPattern);
             });
-        } else {
-            if (input != undefined) {
-                innerHTML = input;
-            }
         }
-
-        innerHTML = innerHTML.replace(/span-class/, 'span class');
 
         return $sce.trustAsHtml(innerHTML);
     }
