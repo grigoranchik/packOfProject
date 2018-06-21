@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html ng-app="alexApp">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+<script src="alex.js" type="text/javascript"></script>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f1f1f1;
+    }
+
+    #regForm {
+        background-color: #ffffff;
+        margin: 100px auto;
+        font-family: Raleway;
+        padding: 40px;
+        width: 70%;
+        min-width: 300px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    input {
+        padding: 10px;
+        width: 100%;
+        font-size: 17px;
+        font-family: Raleway;
+        border: 1px solid #aaaaaa;
+    }
+
+    /* Mark input boxes that gets an error on validation: */
+    input.invalid {
+        background-color: #ffdddd;
+    }
+
+    /* Hide all steps by default: */
+    .tab {
+        display: none;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 17px;
+        font-family: Raleway;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    #prevBtn {
+        background-color: #bbbbbb;
+    }
+
+    /* Make circles that indicate the steps of the form: */
+    .step {
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbbbbb;
+        border: none;
+        border-radius: 50%;
+        display: inline-block;
+        opacity: 0.5;
+    }
+
+    .step.active {
+        opacity: 1;
+    }
+
+    /* Mark the steps that are finished and valid: */
+    .step.finish {
+        background-color: #4CAF50;
+    }
+</style>
+<body ng-controller="myCtrl">
+
+<ng-form id="regForm" action="/">
+    <h1>Register:</h1>
+    <div class="tab">
+        <p>What's your website's address?</p>
+        <p><input placeholder="https://..." ng-model="mucduk.websiteAddress" name="websiteAddress"></p>
+    </div>
+    <div class="tab">
+        <p>What's your name?</p>
+        <p><input placeholder="First name" ng-model="mucduk.name1" name="name1"></p>
+        <p><input placeholder="Last name" ng-model="mucduk.name2" name="name2"></p>
+        <p>What's your email address?</p>
+        <p><input placeholder="E-mail..." ng-model="mucduk.email" name="email"></p>
+    </div>
+
+    <div ng-style="{'overflow':'auto'}">
+        <div ng-style="{'float':'right'}">
+            <button type="button" id="prevBtn" ng-click="nextPrev(-1)">Previous</button>
+            <button type="button" id="nextBtn" ng-click="nextPrev(1)">Next</button>
+        </div>
+    </div>
+    <!-- Circles which indicates the steps of the form: -->
+    <div ng-style="{'text-align':'center', 'margin-top':'40px'}">
+        <span class="step"></span>
+        <span class="step"></span>
+    </div>
+</ng-form>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  ng-app="alexApp">
 <head>
     <meta charset="UTF-8">
     <title>Alex?</title>
@@ -14,10 +14,11 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.4.0/js/ngDialog.min.js"></script>
 
     <script src="alex.js" type="text/javascript"></script>
+    <script src="soska.js" type="text/javascript"></script>
 
 
 </head>
-<body ng-app="alexApp">
+<body>
 
     <style>
 
@@ -28,12 +29,12 @@
     </script>
 
     <div ng-controller="alexCtrl as ctrl_1">
-        <button>start sosat</button>
+        <button ng-click="ctrl_1.myButtonClick()">start sosat</button>
         <br />
-        <span> Nasosano: {{0.4}}</span>
+        <span ng-mogel="ctrl_1.responsSucking"> Nasosano: {{ctrl_1.responsSucking}}</span>
     </div>
 
-    <div ng-bind-html="text | lineBreakFilter"></div>
+    <!--<div ng-bind-html="text | lineBreakFilter"></div>-->
 
 </body>
 </html>
