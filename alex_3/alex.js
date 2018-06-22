@@ -16,18 +16,29 @@ Alex_APP.filter('myFilter', ['$sce', function ($sce) {
         var innerHTML = input;
 
         if (input != undefined && searchPhrase != undefined) {
-            var highlightPattern = "<span class='highlight'>$&</span>";
             var searchWords = searchPhrase.split(' ');
+            var highlightPatternString = '';
+            var RegExpString = '';
 
+            var past = 1;
             _.forEach(searchWords, function (word, i) {
 
-                if (word == undefined || word.length < 2) {
+
+                if (word == undefined) {
                     return;
                 }
 
-                var regEx = new RegExp('[\s]*(' + word + ')[\s]*', 'ig');
-                innerHTML = innerHTML.replace(regEx, '');
+                RegExpString = RegExpString + '([\s]*(' + word + ')[\s]*)|';
+                highlightPatternString = highlightPatternString + "<span class='highlight'>$" + past + "</span>";
+                past = past + 2;
+                //debugger;
+                //'test'.replace(/(t)(es)(t)/, '$1_$2_$3')
             });
+            //debugger;
+
+            var regEx = new RegExp(RegExpString.substring(0, RegExpString.length - 1), 'ig');
+            innerHTML = innerHTML.replace(regEx, highlightPatternString);
+
 
         }
 
