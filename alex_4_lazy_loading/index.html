@@ -23,9 +23,21 @@
 </head>
 <body ng-app="alexApp">
 
+<div
+     style="background-color:blue; width: 250px"
+     ng-controller="alexCtrl as ctrl_1"
+     when-scrolled="ctrl_1.loadMoreItems()">
+
+    <div ng-repeat="item in ctrl_1.itemsArray">
+        -={{item.itemTitle}}=-
+    </div>
+
+    <button ng-click="ctrl_1.loadMoreItems()">load more .. </button>
+</div>
+
     <div>
         <div class="scroll-container"
-             style="background-color: #4CAF50; top:50px; left: 20px; max-height: 600px; height: 600px;"
+             style="background-color: #4CAF50; top:50px; left: 300px; max-height: 600px; height: 600px;"
              ng-controller="alexCtrl as ctrl_1"
              when-scrolled="ctrl_1.loadMoreItems()">
 
@@ -38,7 +50,7 @@
     </div>
 
     <div class="scroll-container"
-         style="background-color: green; top:150px; left:400px; max-height: 500px; height: 500px;"
+         style="background-color: green; top:150px; left:700px; max-height: 500px; height: 500px;"
          ng-controller="alexCtrl as ctrl_1"
          when-scrolled="ctrl_1.loadMoreItems()">
 
