@@ -23,8 +23,12 @@
 </head>
 <body ng-app="alexApp">
 
-    <div class="scroll-container" style="background-color: #4CAF50; top:50px; left: 20px;">
-        <div class="one" ng-controller="alexCtrl as ctrl_1"  when-scrolled="ctrl_1.loadMoreItems()">
+    <div>
+        <div class="scroll-container"
+             style="background-color: #4CAF50; top:50px; left: 20px;"
+             ng-controller="alexCtrl as ctrl_1"
+             when-scrolled="ctrl_1.loadMoreItems()">
+
             <div ng-repeat="item in ctrl_1.itemsArray">
                 -={{item.itemTitle}}=-
             </div>
