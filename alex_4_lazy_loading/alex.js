@@ -7,7 +7,6 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
 
         vm.itemsArray = [];
 
-
         vm.loadMoreItems = function () {
             var startIdx = vm.itemsArray.length;
             for (var i = 0; i < 100; i++) {
@@ -29,15 +28,24 @@ Alex_APP.directive('whenScrolled', function ($window) {
     return function (scope, elm, attr) {
 
         var raw = elm[0];
-        angular.element($window).on("scroll", function () {
-            if (this.pageYOffset + 600 >= raw.offsetHeight) {
-
+        var elem = $(elm);
+        //debugger;
+        elem.scroll(function() {
+            //console.log("Вы прокрутили содержимое маленького окна, .scrollTop = ", + elem.scrollTop() + ' $(\'.myClass\').offset().top= ' + $('.myClass').offset().top + ' elem.height()= ' + elem.height() + ' elem.offset().top' + elem.offset().top);
+            if(elem.find('button').offset().top < elem.height() + elem.offset().top){
                 scope.$apply(attr.whenScrolled);
-            } else {
-
-                console.log('fuck..');
             }
-            scope.$apply();
+        });
+
+        angular.element($window).on("scroll", function() {
+            //console.log('$(document).scrollTop()= ' + $(document).scrollTop() + ' $(window).height()' + $(window).height() + ' $(\'#mainPage\').offset().top ' + $('#mainPage').offset().top + ' $(\'#mainPage\').height() ' + $('#mainPage').height());
+            if ($(document).scrollTop() + $(window).height() > $('#mainPage').offset().top && $(document).scrollTop() - $('#mainPage').offset().top < $('#mainPage').height()){
+                scope.$apply(attr.whenScrolled);
+            }
+            else{
+                console.log('not');
+            }
+            //scope.$apply(); -- ??
         });
 
     };

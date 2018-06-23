@@ -27,10 +27,11 @@
 
     </script>
 
-    <div ng-controller="alexCtrl as ctrl_1">
-        File: <input type="file">
+    <div ng-controller="alexCtrl as ctrl_1"> <!--//байти - бейс 64 - дата урл-->
+        File: <input type="file" name="file" accept=".png,jpg,image/*" directive-open-img="">
         <br />
         <br />
+        <!--{{ctrl_1.selectedFile}}-->
         <img width="500" alt="selected image" src="">
     </div>
 
