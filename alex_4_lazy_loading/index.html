@@ -27,13 +27,19 @@
 
     </script>
 
-    <div ng-controller="alexCtrl as ctrl_1">
+    <div class="one" ng-controller="alexCtrl as ctrl_1"  when-scrolled="ctrl_1.loadMoreItems()">
         <div ng-repeat="item in ctrl_1.itemsArray">
             -={{item.itemTitle}}=-
         </div>
 
         <button ng-click="ctrl_1.loadMoreItems()">load more .. </button>
+        <!--div class="scroller-companies" infinite-scroll="ctrl_1.loadMoreItems()" infinite-scroll-parent="true">-->
     </div>
+
+    <hr />
+    <br />
+    <br />
+    <br />
 
 </body>
 </html>

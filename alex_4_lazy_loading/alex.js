@@ -23,3 +23,26 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         vm.loadMoreItems();
     }
 ]);
+
+
+
+Alex_APP.directive('whenScrolled',  function($window) {
+    return function(scope, elm, attr) {
+
+        var raw = elm[0];
+        angular.element($window).on("scroll", function() {
+            if (this.pageYOffset + 600 >= raw.offsetHeight) {      //this.pageYOffset >= 100     //raw.scrollTop + raw.offsetHeight >= raw.scrollHeight
+                raw.scrollTop;
+                raw.offsetHeight;
+                raw.scrollHeight;
+                //debugger;
+                scope.$apply(attr.whenScrolled);
+            } else {
+
+                console.log('fuck..');
+            }
+            scope.$apply();
+        });
+
+    };
+});
