@@ -29,7 +29,7 @@
     <div ng-controller="alexCtrl as ctrl_1">
         <h4>выбрать язык:</h4>
         <select ng-change="ctrl_1.translate()" ng-model="ctrl_1.selectedLanguage">
-            <option value="en">English</option>
+            <option value="en">{{ctrl_1.translation["message.ENGLISH"]}}</option>
             <option value="uk">Українська</option>
         </select>
         <h4>Выбранный язык:<strong>{{ctrl_1.selectedLanguage}}</strong></h4>
