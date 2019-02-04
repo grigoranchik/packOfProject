@@ -5,6 +5,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
     function ($scope, $timeout, $http, $q, ngDialog, $window) {
         var vm = this;
         vm.resource = '';
+        vm.stack_BatchOfWords = 0;
         vm.controlArray = [];
         vm.helpForControlArray = [];
         vm.optionsLearnParam = ['10', '20', '30'];
@@ -14,23 +15,41 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
             'ruEng': {'inSelect': 4, 'forSecretWord': 1, 'inSelectFromTranslate': -1}
         }
         vm.revertRes = {'inSelect': 1, 'forSecretWord': 4, 'inSelectFromTranslate': 2};
+        $scope.checkboxModel = 'firstCheck';
+
+        $scope.$watch(function () {
+            return $scope.checkboxModel;
+        },function () {
+            vm.stack_BatchOfWords = 0;
+            vm.selectArrayForLearn = [];
+        });
+        vm.getMass = function(){
+            var mass = [];
+            if($scope.checkboxModel == 'firstCheck'){
+                mass = JSON.parse($window.localStorage.getItem('mass'));
+            }
+            if($scope.checkboxModel == 'secondCheck'){
+                mass = JSON.parse($window.localStorage.getItem('ReviewFolder'));
+            }
+            return mass;
+        }
 
         vm.setLearnParam = function (selectedElem) {
-            var mass = JSON.parse($window.localStorage.getItem('mass'));
+            var mass = vm.getMass();
+
             if(mass != undefined){
                 for(var i=0; i<mass.length; i++){
-                    if(i<selectedElem){
+                    if(i<parseInt(selectedElem[0])){
                         vm.selectArrayForLearn[i] = mass[i];
-                        vm.setSecretWord();
                     }else{
                         break;
                     }
                 }
+                vm.setSecretWord();
                 alert('Количество выбранных вами слов для тренажера: ' + selectedElem + '');
             }else{
                 alert('Заполните пожалуйста словарь');
             }
-
         }
 
         vm.setSecretWord = function () {
@@ -73,7 +92,8 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
         vm.nextBatchOfWords = function(selectedElem){
             //debugger;
             var flag = vm.selectArrayForLearn[vm.selectArrayForLearn.length - 1];
-            var mass = JSON.parse($window.localStorage.getItem('mass'));
+            var mass =  vm.getMass();
+
             if(flag != undefined){
                 for(var i=0; i<mass.length; i++){
                     if(flag[1] == mass[i][1]){
@@ -81,6 +101,7 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
                         vm.selectArrayForLearn = [];
                         for(var j=0; j < parseInt(selectedElem); j++){
                             if(mass.length >= i+j + 1){
+                                //debugger;
                                 vm.selectArrayForLearn[j] = mass[i+j + 1];
 
                             }else{
@@ -92,22 +113,26 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
                     }
                 }
                 vm.setSecretWord();
+                vm.stack_BatchOfWords++;
             }
         }
         vm.previousBatchOfWords = function(selectedElem){
-            var flag = vm.selectArrayForLearn[vm.selectArrayForLearn.length - 1];
+            //debugger;
+            if(vm.stack_BatchOfWords == 0){ return;}
+            var flag = vm.selectArrayForLearn[0];
+            var mass =  vm.getMass();
             if(flag != undefined){
-                var mass = JSON.parse($window.localStorage.getItem('mass'));
+                var selectArrayForLearn = [];
                 for(var i=0; i<mass.length; i++){
                     if(flag[1] == mass[i][1]){
                         //debugger;
-                        vm.selectArrayForLearn = [];
-                        var myIndex = i-1;
-                        for(var j=0; j < parseInt(selectedElem); j++){
+                        var indexOfFirstElemToArrToLearn = i-1;
+                        var selectedItem = parseInt(selectedElem);
+                        for(var j=0; j < selectedItem; j++){
                             //debugger
-                            if(myIndex >=0){
-                                vm.selectArrayForLearn[j] = mass[myIndex];
-                                myIndex--;
+                            if(indexOfFirstElemToArrToLearn >=0){
+                                selectArrayForLearn[j] = mass[indexOfFirstElemToArrToLearn];
+                                indexOfFirstElemToArrToLearn--;
                             }else{
                                 break;
                             }
@@ -115,7 +140,10 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
 
                     }
                 }
+                vm.selectArrayForLearn = selectArrayForLearn.reverse();
                 vm.setSecretWord();
+                vm.stack_BatchOfWords--;
+
             }
         }
         vm.revert = function(){
@@ -196,6 +224,31 @@ Alex_APP.controller('alexCtrl', ['$scope', '$timeout', '$http', '$q', 'ngDialog'
 
     }
 ]);
+
+Alex_APP.directive('rightClick',['$window', function($window){
+    document.oncontextmenu = function (e) {
+        if(e.target.hasAttribute('right-click')) {
+            return false;
+        }
+    };
+    return function(scope,el,attrs){
+        el.bind('contextmenu',function(e){
+            //debugger;
+            var selectedArrayElem=JSON.parse(attrs.rightClick);
+            var mass = JSON.parse($window.localStorage.getItem('ReviewFolder'));
+            if(mass != null){
+                selectedArrayElem[5] = 0;
+                mass.push(selectedArrayElem);
+                $window.localStorage.setItem('ReviewFolder', JSON.stringify(mass));
+            }else{
+                mass = [];
+                mass[0] = selectedArrayElem;
+                $window.localStorage.setItem('ReviewFolder', JSON.stringify(mass));
+            }
+        });
+    }
+}]);
+
 Alex_APP.filter('filterLimitGoodResult', [function () {
     return function (input, filterLimit, maxInfo) {
         //debugger;

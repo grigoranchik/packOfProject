@@ -19,6 +19,7 @@ Alex_APP.directive('directiveOpenImg', ['$rootScope', '$timeout', function ($roo
     return {
         link: function (scope, element, attr) {
             var elem = $(element);
+            debugger;
             elem.on('change', function () {
                 var tmppath = URL.createObjectURL(event.target.files[0]);
                 $("img").fadeIn("fast").attr('src', tmppath);

@@ -46,22 +46,30 @@
             <option ng-click="ctrl_1.setLearnParam(selectedElem)" ng-repeat="option in ctrl_1.optionsLearnParam">{{option}}</option>
 
         </select>
-
         <input type="number" min="0" max="10"  ng-init="filterLimit = 0"  size="5" ng-model="filterLimit">
         <button ng-click="ctrl_1.nullAllResult()">nullResult</button>
         <button ng-click="ctrl_1.revert()">revert</button>
 
         <select class="mySelect" multiple="multiple" ng-model="selected">
-
-            <option ng-mousedown="ctrl_1.controlAnswerTheQuestion($index, selectArrayElem[ctrl_1.revertRes.inSelect])"
-                    ng-repeat="selectArrayElem in ctrl_1.selectArrayForLearn">{{selectArrayElem[ctrl_1.revertRes.inSelect] | filterLimitGoodResult:filterLimit:selectArrayElem[5]}}  {{ selectArrayElem[ctrl_1.revertRes.inSelectFromTranslate] | filterLimitGoodResult:filterLimit:selectArrayElem[5]}}</option>
-
+            <option right-click="{{selectArrayElem}}" ng-mousedown="ctrl_1.controlAnswerTheQuestion($index, selectArrayElem[ctrl_1.revertRes.inSelect])"
+                    ng-repeat="selectArrayElem in ctrl_1.selectArrayForLearn">
+                {{selectArrayElem[ctrl_1.revertRes.inSelect] | filterLimitGoodResult:filterLimit:selectArrayElem[5]}}
+                {{ selectArrayElem[ctrl_1.revertRes.inSelectFromTranslate] | filterLimitGoodResult:filterLimit:selectArrayElem[5]}}
+            </option>
         </select>
 
         <hr/>
         <button ng-click="ctrl_1.previousBatchOfWords(selectedElem[0])">предыдущие {{selectedElem[0]}} слов</button>
+        Очередь: {{ctrl_1.stack_BatchOfWords}}
         <button ng-click="ctrl_1.nextBatchOfWords(selectedElem[0])">следующие {{selectedElem[0]}} слов</button>
         {{ctrl_1.selectArrayForLearn[ctrl_1.rand][ctrl_1.revertRes.forSecretWord]}}
+        <br/>
+        <label>Основной массив:
+            <input type="radio" ng-model="checkboxModel" value="firstCheck">
+        </label><br/>
+        <label>Выборочный массив:
+            <input type="radio" ng-model="checkboxModel" value="secondCheck">
+        </label><br/>
 
     </div>
 
